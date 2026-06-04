@@ -1,0 +1,156 @@
+.tabla_alumnos {
+width: 100%;
+border-collapse: separate;
+border-spacing: 0 15px;
+}
+
+.fila_alumno td:first-child {
+border-top-left-radius: 10px;
+border-bottom-left-radius: 10px;
+}
+
+.boton_crear {
+width: 100%;
+padding: 20px;
+background-color: white;
+border: 2px solid #ccc;
+border-radius: 10px;
+font-size: 16px;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+}
+
+.enlace:hover {
+text-decoration: underline;
+color: darkblue;
+}
+
+.icono_flotante {
+position: absolute;
+top: 10px;
+right: 30px;
+background-color: #f68b33;
+color: white;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+text-align: center;
+line-height: 40px;
+font-weight: bold;
+}
+
+.pie_pagina {
+background-color: #f68b33;
+padding: 10px 20px;
+text-align: right;
+font-weight: bold;
+margin-left: 250px;
+}
+
+.logo_derecha {
+float: right;
+}
+
+.encabezado {
+background-color: #e8e8e8;
+padding: 15px;
+height: 50px;
+}
+
+.col_icono {
+width: 50px;
+}
+
+.boton_naranja {
+width: 100%;
+padding: 10px;
+background-color: #f68b33;
+border: none;
+border-radius: 15px;
+margin-bottom: 10px;
+font-weight: bold;
+cursor: pointer;
+transition: transform 0.2s;
+}
+
+.fila_alumno {
+background-color: #e2e2e2;
+}
+
+.boton_naranja:hover {
+background-color: #e07a22;
+transform: scale(1.05);
+}
+
+.menu_lateral {
+width: 250px;
+background-color: #d9d9d9;
+height: 600px;
+float: left;
+padding: 20px;
+box-sizing: border-box;
+}
+
+.logo {
+background-color: #ccc;
+padding: 10px;
+margin-right: 10px;
+border-radius: 50%;
+}
+
+.fila_alumno td {
+padding: 15px;
+}
+
+.mas {
+font-size: 24px;
+font-weight: bold;
+}
+
+.barra_azul {
+background-color: #8da2eb;
+padding: 10px;
+font-weight: bold;
+clear: both;
+}
+
+.enlace {
+color: blue;
+text-decoration: none;
+}
+
+.boton_crear:hover {
+background-color: #f0f0f0;
+}
+
+.logos_izquierda {
+float: left;
+}
+
+.avatar {
+background-color: white;
+width: 30px;
+height: 30px;
+border-radius: 50%;
+text-align: center;
+line-height: 30px;
+border: 1px solid #000;
+}
+
+.contenido {
+margin-left: 250px;
+padding: 30px;
+position: relative;
+}
+
+.fila_alumno td:last-child {
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+

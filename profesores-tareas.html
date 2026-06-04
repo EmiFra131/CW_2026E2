@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesor</title>
+    <link rel="stylesheet" href="css/profesores-tareas.css">
+</head>
+<body>
+    <header class="logos">
+        <div class="img-logos">
+            <img id="unam"src="img/unam.jpg">
+            <img src="img/enp.jpg">
+            <img id="ete"src="img/ete.png">
+            <div class="usuario">
+                <h1>PROFESOR-TAREAS</h1>
+            </div>
+    </header>
+    <main>
+        <img src="img/tarea.png">
+        <h2>TAREA:</h2>
+        <form class ="titulo">
+            <input type="text" id="tarea" name="tarea">
+        </form>
+        <h3>Descripción:</h3>
+        <form>
+            <textarea name="descripcion" id="descripcion" cols="30" rows="10"></textarea>
+        </form>
+        <h4>
+            <form class = "publicacion">
+                <fieldset>
+                    <label class="opcion" for="Publicar-todos">Publicar para todos:</label>
+                    <input type="radio" id="Publicar-todos" name="tarea-prof"><br>
+                    <label class="opcion" for="Publicar-ind">Publicar individualmente:</label>
+                    <input type="radio" id="Publicar-ind" name="tarea-prof"><br>
+                    <label class="opcion" for="Agregar">Agregar multimedia y archivos</label>  
+                    <input  type="file" id="Agregar" name="tarea-prof"><br>
+                    <input  class="opcion" type="submit" value="Publicar"> 
+
+                </fieldset>
+        </h4>
+    </main>
