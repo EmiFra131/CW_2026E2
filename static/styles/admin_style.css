@@ -1,0 +1,142 @@
+/* =========================
+   RESET GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+    /* Hace que el padding no aumente el tamaño total */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #d0d0d0;
+    min-height: 100vh;
+    /* Para que el fondo ocupe toda la altura de la pantalla */
+}
+
+
+/* =========================
+   ESTRUCTURA PRINCIPAL
+   (cosas acomodadas en fila)
+========================= */
+
+nav,
+.contenido_principal,
+.fila_alumno {
+    display: flex;
+    /* Flex ayuda a acomodar elementos más fácil */
+}
+nav img {
+    height: 50px;
+}
+
+nav {
+    background-color: white;
+
+    justify-content: space-between;
+    /* Manda elementos a extremos opuestos */
+
+    align-items: center;
+    /* Centra verticalmente */
+
+    padding: 10px 20px;
+}
+
+.contenido_principal {
+    padding: 20px;
+
+    gap: 20px;
+    /* Espacio entre la tarjeta y la sección de alumnos */
+}
+
+.fila_alumno {
+    background-color: #e0e0e0;
+
+    padding: 12px 15px;
+
+    border-radius: 6px;
+
+    justify-content: space-between;
+    /* Separa información e iconos */
+}
+
+
+/* =========================
+   ENCABEZADO
+--------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+header {
+    background-color: #4a90d9;
+    color: white;
+
+    padding: 8px 20px;
+
+    width: 30%;
+    /* Solo ocupa parte de arriba */
+}
+
+header h1 {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+/* =========================
+   TARJETA DEL PROFESOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.tarjeta_profesor {
+    background-color: white;
+
+    width: 189px;
+    min-height: 274px;
+    /* Altura mínima para mantener forma */
+
+    padding: 15px;
+
+    border-radius: 8px;
+}
+
+
+/* =========================
+   SECCIÓN DE ALUMNOS
+   (todo hacia abajo)
+------------------------------------------------------------------------------------ */
+
+.seccion_alumno {
+    flex: 1;
+    /* Hace que esta parte use el espacio restante */
+
+    display: flex;
+
+    flex-direction: column;
+    /* Apila elementos uno debajo de otro */
+
+    gap: 10px;
+}
+
+
+/* =========================
+   BOTÓN AGREGAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.boton_agregar {
+    background-color: #f5a623;
+    color: white;
+
+    padding: 12px 25px;
+
+    border-radius: 25px;
+
+    align-self: flex-end;
+    /* Lo manda hacia la derecha */
+
+    cursor: pointer;
+    /* Cambia el cursor al pasar encima */
+}
+.tarjeta_profesor img {
+    width: 100%;
+    margin-bottom: 10px;
+}
