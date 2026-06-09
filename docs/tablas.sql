@@ -1,5 +1,5 @@
 CREATE TABLE tipo_usuario(
-    id-tipo_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    id_tipo_usuario INT AUTO_INCREMENT PRIMARY KEY,
     rol VARCHAR(10) NOT NULL UNIQUE
 );
 
@@ -18,7 +18,7 @@ CREATE TABLE cuenta(
     id_tipo_usuario INT NOT NULL,
 
     FOREIGN KEY (id_tipo_usuario) 
-    REFERENCES tipo_usuario(id-tipo_usuario)
+    REFERENCES tipo_usuario(id_tipo_usuario)
 );
 
 CREATE TABLE tipo_aprendizaje(
@@ -158,7 +158,6 @@ CREATE TABLE entrega(
     id_cuenta CHAR(36) NOT NULL,
     entregado BOOL DEFAULT FALSE,
     calificacion DECIMAL(5,2),
-    fecha_de_entrega DATETIME,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (id_actividad_grupo)
@@ -206,12 +205,16 @@ CREATE TABLE respuesta_cuestionario(
     REFERENCES cuestionario(id_cuestionario)
 );
 
-CREATE TABLE retroalimentacion_alumno(
-    id_actividad_grupo CHAR(36) PRIMARY KEY,
-    id_cuenta CHAR(36) NOT NULL PRIMARY KEY,
-    valoracion INT NOT NULL,
-    pregunta1 BOOL,
-    pregunta2 BOOL,
-    pregunta3 BOOL,
-    pregunta4 BOOL:
+
+CREATE TABLE retroalimentacion_alumno (
+    id_actividad_grupo CHAR(36)         NOT NULL,
+    id_cuenta          CHAR(36)         NOT NULL,
+    valoracion         TINYINT UNSIGNED CHECK (valoracion <= 5),
+    pregunta1          BOOL,
+    pregunta2          BOOL,
+    pregunta3          BOOL,
+    pregunta4          BOOL,
+    PRIMARY KEY (id_actividad_grupo, id_cuenta),
+    FOREIGN KEY (id_actividad_grupo) REFERENCES actividad_grupo (id_actividad_grupo),
+    FOREIGN KEY (id_cuenta)          REFERENCES cuenta          (id_cuenta)
 );
