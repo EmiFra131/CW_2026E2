@@ -443,21 +443,21 @@ WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ##### CREATE
 ```sql
     INSERT INTO aprendizaje_cuenta (id_cuenta, id_tipo_aprendizaje)
-    VALUES ('a1b2c3d4-e5f6-7890-abcd-ef1234567890'), (2);
+    VALUES ('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 2);
 ```
 ##### READ
 Todos:
-```sql
+```sql 
     SELECT a.id_cuenta t.tipo a.id_tipo_aprendizaje 
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = t.id_tipo_aprendizaje
+    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuenta
     INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
 ```
 Tipo
 ```sql
     SELECT a.id_cuenta, t.tipo, a.id_tipo_aprendizaje
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = t.id_tipo_aprendizaje
+    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuentae
     INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
     WHERE t.tipo = 'visual';
 ```
@@ -465,12 +465,16 @@ Uno:
 ```sql
     SELECT a.id_cuenta, t.tipo, a.id_tipo_aprendizaje
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = t.id_tipo_aprendizaje
-    WHERE a.cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuenta
+    WHERE a.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
     INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
 ```
 ##### UPDATE
 ```sql
+    UPDATE aprendizaje_cuenta
+    SET id_tipo_aprendizaje = 2
+    WHERE id_cuenta = 'uuid-cuenta':
+
 
 ```
 ##### DELETE
@@ -479,40 +483,413 @@ Uno:
     WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 
-#### Entidad: 
+#### Entidad: grupo
 ##### CREATE
 ```sql
-
+    INSERT INTO grupo (nombre_grupo, id_turno, id_ciclo)
+    VALUES ('63-A',1, 4);
 ```
 ##### READ
 Todos:
 ```sql
+    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    FROM grupo g
+    INNER JOIN turno t
+        ON g.id_turno = t.id_turno
+    INNER JOIN ciclo_escolar c
+        ON g.id_ciclo = c.id_ciclo
+   
 
 ```
 Tipo
 ```sql
+    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    FROM grupo g
+    INNER JOIN turno t ON g.id_turno = t.id_turno
+    INNER JOIN ciclo_escolar c ON g.id_ciclo = c.id_ciclo
+    WHERE t.turno = 'Matutino';
+
 
 ```
 Uno:
 ```sql
-
+    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    FROM grupo g
+    INNER JOIN turno t
+        ON g.id_turno = t.id_turno
+    INNER JOIN ciclo_escolar c
+        ON g.id_ciclo = c.id_ciclo
+    WHERE g.id_grupo = 1;
 ```
 ##### UPDATE
 ```sql
+    UPDATE grupo
+    SET nombre_grupo = '63-B'
+    WHERE id_grupo = 1;
 
 ```
 ##### DELETE
 ```sql
+    DELETE FROM grupo
+    WHERE id_grupo = 1;
+```
 
+#### Entidad: ciclo_cuenta
+##### CREATE
+```sql
+    INSERT INTO ciclo_cuenta (id_cuenta, id_grupo, id_ciclo)
+    VALUES ('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 1, 3);
+```
+##### READ
+Todos:
+```sql
+    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    FROM ciclo_cuenta cc
+    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
+    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
+```
+Tipo
+```sql
+    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    FROM ciclo_cuenta cc
+    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
+    WHERE cc.grupo = 1
+    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
+```
+Uno:
+```sql
+    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    FROM ciclo_cuenta cc
+    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+    WHERE cc.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
+    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
+    
+```
+##### UPDATE
+```sql
+    UPDATE ciclo_cuenta
+    SET id_grupo = 2
+    WHERE id_cuenta = 'uuid-cuenta':
+```
+##### DELETE
+```sql
+    DELETE FROM aprendizaje_cuenta
+    WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
+
+#### Actividad
+##### CREATE
+```sql
+    INSERT INTO actividad(id_actividad, nombre, descripcion, id_cuenta_profesor, id_tipo_tarea)
+    VALUES
+    (UUID(), 'Proyecto final', 'Codigo Allegro', 'uuid-profesor', 1);
+ ```   
+
+##### READ
+Todos
+ ```sql
+    SELECT a.id_actividad, a.nombre, a.descripcion, c.nombre profesor, tt.tipo
+    FROM actividad a 
+    INNER JOIN cuenta c
+        ON a.id_cuenta_profesor = c.id_cuenta
+    INNER JOIN tipo_tarea tt 
+        ON a.id_tipo_tarea = tt.id_tipo_tarea
+ 
+ 
+ ```
+Uno;
+ ```sql
+    SELECT a.id_actividad, a.nombre, a.descripcion, c.nombre profesor, tt.tipo
+    FROM actividad a
+    INNER JOIN cuenta c
+        ON a.id_cuenta_profesor = c.id_cuenta
+    INNER JOIN tipo_tarea tt
+        ON a.id_tipo_tarea = tt.id_tipo_tarea
+    WHERE a.id_actividad = 'uuid';
+ 
+ ```
+
+ #### UPDATE
+```sql  
+    UPDATE actividad
+    SET 'Actividad entregada'
+    WHERE id_cuenta = 'uuid-cuenta'
 ```
 
 
+ ##### DELETE
+  ```sql
+    DELETE FROM actividad
+    WHERE id_actividad = 'uuid';
+ 
+ ```
 
 
+#### Entidad: comentario
+##### CREATE
+```sql
+    INSERT INTO comentario (id_comentario, contenido, privado, id_cuenta)
+    VALUES (UUID(), 'Hola buenos dias', 0,'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
+```
+##### READ
+Todos:
+```sql
+    SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
+    FROM comentario co
+    INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
+```
+Tipo
+```sql
+    SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
+    FROM comentario co
+    INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
+    WHERE co.privado = 1
+```
+Uno:
+```sql
+    SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
+    FROM comentario co
+    INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
+    WHERE co.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+```
+##### UPDATE
+```sql
+    UPDATE comentario
+    SET privado = 1
+    WHERE id_cuenta = 'uuid-cuenta':
+```
+##### DELETE
+```sql
+    DELETE FROM comentario
+    WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
 
+#### Entidad: actividad_grrupo
+##### CREATE
+```sql
+    INSERT INTO actividad_grupo (id_actividad_grupo, id_actividad, id_grupo, id_ciclo, fecha_de_entrega)
+    VALUES (UUID(), 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 2, 1,'2026-06-12 10:00:00');
+```
+##### READ
+Todos:
+```sql
+    SELECT a.id_actividad_grupo a.id_actividad a.id_grupo a.id_ciclo a.fecha_de_entrega ac.nombre
+    FROM actividad_grupo a
+    INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
+    INNER JOIN grupo g ON a.id_grupo = g.id_grupo
+    INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
+```
+Tipo
+```sql
+    SELECT a.id_actividad_grupo a.id_actividad a.id_grupo a.id_ciclo a.fecha_de_entrega ac.nombre
+    FROM actividad_grupo a
+    INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
+    INNER JOIN grupo g ON a.id_grupo = g.id_grupo
+    INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
+    WHERE a.ciclo = 2
+```
+Uno:
+```sql
+    SELECT a.id_actividad_grupo a.id_actividad a.id_grupo a.id_ciclo a.fecha_de_entrega ac.nombre
+    FROM actividad_grupo a
+    INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
+    WHERE a.id_actividad = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    INNER JOIN grupo g ON a.id_grupo = g.id_grupo
+    INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
+```
+##### UPDATE
+```sql
+    UPDATE actividad_grupo
+    SET fecha de entrega = '2026-06-13 10:00:00'
+    WHERE id_actividad_grupo = 'uuid-actividad_grupo':
+```
+##### DELETE
+```sql
+    DELETE FROM actividad_grupo
+    WHERE id_actividad_grupo = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
 
+#### Entidad: entrega
+##### CREATE
+```sql
+    INSERT INTO entrega (id_entrega, id_actividad_grupo, id_cuenta, entregado, calificacion)
+    VALUES (UUID(), 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',0, 10);
+```
+##### READ
+Todos:
+```sql
+    SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
+    FROM entrega e
+    INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
+    INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+```
+Tipo
+```sql
+    SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
+    FROM entrega e
+    INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
+    WHERE id_actividad_grupo = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+```
+Uno:
+```sql
+    SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
+    FROM entrega e
+    INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
+    WHERE id_entrega = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+```
+##### UPDATE
+```sql
+    UPDATE entrega
+    SET entregado = 1
+    WHERE id_entrega = 'uuid-entrega':
+```
+##### DELETE
+```sql
+    DELETE FROM entrega
+    WHERE id_entrega = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
 
+#### ENTIDAD: ARCHIVO
 
+#### CREATE
+```sql
+    INSERT INTO archivo (nombre, ruta, mime_type, id_entrega)
+    VALUES('documento.pdf', '/files/doc.pdf');
+
+```
+#### READ
+todos
+```sql
+    SELECT ar.id_archivo, ar.nombre, e.id_entrega, a.nombre archivo_de_actividad
+    FROM archivo ar
+    LEFT JOIN entrega e ON ar.id_entrega = e.id_entrega
+    LEFT JOIN actividad a ON ar.id_actividad = a.id_actividad;
+```
+#### UPDATE
+```sql
+    UPDATE archivo SET nombre = 'nuevo_nombre.pdf' WHERE id_archivo = 'uuid-archivo';
+    SET subidos = 1
+    WHERE id_archivo = 'uuid-archivo'
+```
+#### DELETE 
+```sql
+    DELETE FROM archivo
+    WHERE id_archivo = "uuid-archivo"
+
+```
+#### Entidad: cuestionario
+##### CREATE
+```sql
+    INSERT INTO cuestionario (id_cuestionario, id_ciclo_cuenta, enlace)
+    VALUES (UUID(), 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'https://.....');
+```
+##### READ
+Todos:
+```sql
+    SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
+    FROM cuestionario cu
+    INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
+```
+Tipo
+```sql
+    SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
+    FROM cuestionario cu
+    INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
+    WHERE id_ciclo_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+```
+Uno:
+```sql
+    SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
+    FROM cuestionario cu
+    INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
+    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+```
+##### UPDATE
+    ```sql
+        UPDATE cuestionario
+        SET enlace = 'https://.......'
+        WHERE id_cuestionario = 'uuid-entrega':
+    ```
+##### DELETE
+```sql
+    DELETE FROM cuestionario
+    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
+### ENTIDAD: retroalimentacion_cuestionario
+### CREATE
+```sql
+    INSERT INTO retroalimentacion_cuestionario (id_)
+    
+```
+### READ
+```sql
+    
+```
+### UPDATE
+```sql
+    UPDATE retroalimentacion_cuestionario
+    SET ver retroalimentacion = 'Ver resultados de retroalimentacion'
+    WHERE id_retroalimentacion_cuestionario = 'uuid-retroalimentacion_cuestionario'
+    
+```
+### DELETE
+```sql
+    DELETE FROM retroalimentacion_cuestionario
+    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890
+    
+```
+
+#### Entidad: retroalimentacion_alumno
+##### CREATE
+```sql
+    INSERT INTO retroalimentacion_alumno (id_actividad_grupo, id_cuenta, valoracion, pregunta1, pregunta2, pregunta3, pregunta4)
+    VALUES ('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',5,0,1,1,0);
+```
+##### READ
+Todos:
+```sql
+    SELECT ra.id_actividad_grupo, ra.id_cuenta, ra.valoracion, ra.pregunta1, ra.pregunta2, ra.pregunta3, ra.pregunta4
+    FROM ra
+    INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
+    INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
+```
+Tipo
+```sql
+    SELECT ra.id_actividad_grupo, ra.id_cuenta, ra.valoracion, ra.pregunta1, ra.pregunta2, ra.pregunta3, ra.pregunta4
+    FROM ra
+    INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
+    INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
+    WHERE ra.pregunta1 = 1
+```
+Uno:
+```sql
+    SELECT ra.id_actividad_grupo, ra.id_cuenta, ra.valoracion, ra.pregunta1, ra.pregunta2, ra.pregunta3, ra.pregunta4
+    FROM ra
+    INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
+    INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
+    WHERE ra.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+```
+##### UPDATE
+```sql
+    UPDATE retroalimentacion_alumno
+    SET valoracion = 4,
+        pregunta1 = 1,
+        pregunta2 = 0,
+        pregunta3 = 1,
+        pregunta4 = 1,
+
+    WHERE id_actividad_grupo = 'uuid-actividad-grupo' AND id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
+##### DELETE
+```sql
+    DELETE FROM retroalimentacion_alumno
+    WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+```
 
 ### Consultas para obtener KPI's
 
