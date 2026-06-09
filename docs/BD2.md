@@ -231,12 +231,12 @@ WHERE id_tipo_usuario = 1;
 ```sql
 UPDATE tipo_usuario
 SET rol='Docente'
-WHERE id_tipo_usuario = 2
+WHERE id_tipo_usuario = 2;
 ```
 ##### DELETE
 ```sql
 DELETE FROM tipo_usuario
-WHERE id_tipo_usuario = 2
+WHERE id_tipo_usuario = 2;
 ```
 
 #### Entidad: tipo_aprendizaje
@@ -265,12 +265,12 @@ WHERE id_tipo_aprendizaje = 2;
 ```sql
 UPDATE tipo_aprendizaje
 SET tipo='Lectura / Escritura'
-WHERE id_tipo_aprendizaje = 4
+WHERE id_tipo_aprendizaje = 4;
 ```
 ##### DELETE
 ```sql
 DELETE FROM tipo_aprendizaje
-WHERE id_tipo_aprendizaje = 5
+WHERE id_tipo_aprendizaje = 5;
 ```
 
 #### Entidad: Turno
@@ -357,7 +357,7 @@ VALUES
 Todos:
 ```sql
 SELECT id_ciclo, periodo
-FROM ciclo_escolar
+FROM ciclo_escolar;
 ```
 Uno:
 ```sql
@@ -380,7 +380,7 @@ WHERE id_ciclo = 1;
 #### Entidad: cuenta
 ##### CREATE
 ```sql
-INSERT INTO cuenta (id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
+INSERT INTO cuenta (correo, nombre, contraseña, id_tipo_usuario)
 VALUES (UUID(), 'correo@gmail.com', 'Nombre', 'hash', 1)
 ```
 ##### READ
@@ -392,7 +392,7 @@ INNER JOIN tipo_usuario t ON cuenta.id_tipo_usuario = tipo_usuario.id_tipo_usuar
 ```
 Todos (con aliases):
 ```sql
-SELECT c.id_cuenta, c.correo, c.nombre, t.rol, c.created_at
+SELECT c.nombre, c.correo, t.rol, c.created_at
 FROM cuenta c
 INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario;
 ```
@@ -401,14 +401,16 @@ Un tipo (sin aliases):
 ```sql
 SELECT cuenta.id_cuenta, cuenta.correo, cuenta.nombre, cuenta.created_at 
 FROM cuenta 
-INNER JOIN tipo_usuario ON cuenta.id_tipo usuario = tipo_usuario.id_tipo_usuario 
+INNER JOIN tipo_usuario 
+    ON cuenta.id_tipo usuario = tipo_usuario.id_tipo_usuario 
 WHERE tipo_usuario.rol ='Profesor';
 ```
 Un tipo (con aliases):
 ```sql
-SELECT c.id_cuenta, c.correo, c.nombre, c.created_at
+SELECT c.nombre, c.correo, c.created_at
 FROM cuenta c
-INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
+INNER JOIN tipo_usuario t 
+    ON c.id_tipo_usuario = t.id_tipo_usuario
 WHERE t.rol = 'Profesor';
 ```
 
@@ -421,10 +423,10 @@ WHERE cuenta.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 Uno (con aliases):
 ```sql
-SELECT c.id_cuenta, c.correo, c.nombre, t.rol, c.created_at
+SELECT c.nombre, c.correo, t.rol, c.created_at
 FROM cuenta c
 INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
-WHERE c.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+WHERE c.id_cuenta = 'uuid-cuenta';
 ```
 ##### UPDATE
 ```sql
@@ -448,32 +450,40 @@ WHERE id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ##### READ
 Todos:
 ```sql 
-    SELECT a.id_cuenta t.tipo a.id_tipo_aprendizaje 
+  -- READ Todos
+    SELECT c.nombre, t.tipo
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuenta
-    INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
+    INNER JOIN cuenta  c 
+        ON a.id_cuenta = c.id_cuenta
+    INNER JOIN tipo_aprendizaje t 
+        ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje;
 ```
 Tipo
 ```sql
-    SELECT a.id_cuenta, t.tipo, a.id_tipo_aprendizaje
+    SELECT c.nombre, t.tipo
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuentae
-    INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
+    INNER JOIN cuenta c 
+        ON a.id_cuenta = c.id_cuenta
+    INNER JOIN tipo_aprendizaje t 
+        ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
     WHERE t.tipo = 'visual';
 ```
 Uno:
 ```sql
-    SELECT a.id_cuenta, t.tipo, a.id_tipo_aprendizaje
+    SELECT c.nombre, t.tipo
     FROM aprendizaje_cuenta a
-    INNER JOIN cuenta c ON a.id_cuenta = c.id_cuenta
-    WHERE a.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-    INNER JOIN tipo_aprendizaje t ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
+    INNER JOIN cuenta c 
+        ON a.id_cuenta = c.id_cuenta
+    INNER JOIN tipo_aprendizaje t 
+        ON a.id_tipo_aprendizaje = t.id_tipo_aprendizaje
+    WHERE a.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+    
 ```
 ##### UPDATE
 ```sql
     UPDATE aprendizaje_cuenta
     SET id_tipo_aprendizaje = 2
-    WHERE id_cuenta = 'uuid-cuenta':
+    WHERE id_cuenta = 'uuid-cuenta';
 
 
 ```
@@ -492,33 +502,35 @@ Uno:
 ##### READ
 Todos:
 ```sql
-    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    SELECT g.nombre_grupo, t.turno, ce.periodo
     FROM grupo g
     INNER JOIN turno t
         ON g.id_turno = t.id_turno
-    INNER JOIN ciclo_escolar c
-        ON g.id_ciclo = c.id_ciclo
+    INNER JOIN ciclo_escolar ce
+        ON g.id_ciclo = ce.id_ciclo;
    
 
 ```
 Tipo
 ```sql
-    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    SELECT g.nombre_grupo, t.turno, ce.periodo
     FROM grupo g
-    INNER JOIN turno t ON g.id_turno = t.id_turno
-    INNER JOIN ciclo_escolar c ON g.id_ciclo = c.id_ciclo
+    INNER JOIN turno t 
+        ON g.id_turno = t.id_turno
+    INNER JOIN ciclo_escolar ce
+        ON g.id_ciclo = ce.id_ciclo
     WHERE t.turno = 'Matutino';
 
 
 ```
 Uno:
 ```sql
-    SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
+    SELECT g.nombre_grupo, t.turno, ce.periodo
     FROM grupo g
     INNER JOIN turno t
         ON g.id_turno = t.id_turno
     INNER JOIN ciclo_escolar c
-        ON g.id_ciclo = c.id_ciclo
+        ON g.id_ciclo = ce.id_ciclo
     WHERE g.id_grupo = 1;
 ```
 ##### UPDATE
@@ -543,36 +555,45 @@ Uno:
 ##### READ
 Todos:
 ```sql
-    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    SELECT c.nombre, g.nombre_grupo, ce.periodo
     FROM ciclo_cuenta cc
-    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
-    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
-    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
+    INNER JOIN cuenta c 
+        ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN grupo g 
+        ON cc.id_grupo = g.id_grupo
+    INNER JOIN ciclo ce
+        ON cc.id_cilo = ce.id_ciclo;
 ```
 Tipo
 ```sql
-    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    SELECT c.nombre, g.nombre_grupo, ce.periodo
     FROM ciclo_cuenta cc
-    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
-    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
-    WHERE cc.grupo = 1
-    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
+    INNER JOIN cuenta  c  
+        ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN grupo  g  
+        ON cc.id_grupo  = g.id_grupo
+    INNER JOIN ciclo_escolar ce 
+        ON cc.id_ciclo  = ce.id_ciclo
+    WHERE cc.id_grupo = 1;
 ```
 Uno:
 ```sql
-    SELECT cc.id_cuenta cc.id_grupo cc.id_ciclo
+    SELECT c.nombre, g.nombre_grupo, ce.periodo
     FROM ciclo_cuenta cc
-    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
-    WHERE cc.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-    INNER JOIN grupo g ON cc.id_grupo = g.id_grupo
-    INNER JOIN ciclo ci on cc.id_cilo = ci.id_ciclo
-    
+    INNER JOIN cuenta c  
+        ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN grupo  g  
+        ON cc.id_grupo  = g.id_grupo
+    INNER JOIN ciclo_escolar ce 
+        ON cc.id_ciclo  = ce.id_ciclo
+    WHERE cc.id_cuenta = 'uuid-cuenta';
+        
 ```
 ##### UPDATE
 ```sql
     UPDATE ciclo_cuenta
     SET id_grupo = 2
-    WHERE id_cuenta = 'uuid-cuenta':
+    WHERE id_cuenta = 'uuid-cuenta';
 ```
 ##### DELETE
 ```sql
@@ -583,7 +604,7 @@ Uno:
 #### Actividad
 ##### CREATE
 ```sql
-    INSERT INTO actividad(id_actividad, nombre, descripcion, id_cuenta_profesor, id_tipo_tarea)
+    INSERT INTO actividad( nombre, descripcion, id_cuenta_profesor, id_tipo_tarea)
     VALUES
     (UUID(), 'Proyecto final', 'Codigo Allegro', 'uuid-profesor', 1);
  ```   
@@ -591,18 +612,18 @@ Uno:
 ##### READ
 Todos
  ```sql
-    SELECT a.id_actividad, a.nombre, a.descripcion, c.nombre profesor, tt.tipo
+    SELECT a.nombre, a.descripcion, c.nombre profesor, tt.tipo
     FROM actividad a 
     INNER JOIN cuenta c
         ON a.id_cuenta_profesor = c.id_cuenta
     INNER JOIN tipo_tarea tt 
-        ON a.id_tipo_tarea = tt.id_tipo_tarea
+        ON a.id_tipo_tarea = tt.id_tipo_tarea;
  
  
  ```
 Uno;
  ```sql
-    SELECT a.id_actividad, a.nombre, a.descripcion, c.nombre profesor, tt.tipo
+    SELECT a.nombre, a.descripcion, c.nombre profesor, tt.tipo
     FROM actividad a
     INNER JOIN cuenta c
         ON a.id_cuenta_profesor = c.id_cuenta
@@ -616,7 +637,7 @@ Uno;
 ```sql  
     UPDATE actividad
     SET 'Actividad entregada'
-    WHERE id_cuenta = 'uuid-cuenta'
+    WHERE id_cuenta = 'uuid-cuenta';
 ```
 
 
@@ -639,27 +660,27 @@ Todos:
 ```sql
     SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
     FROM comentario co
-    INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
+    INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta;
 ```
 Tipo
 ```sql
     SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
     FROM comentario co
     INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
-    WHERE co.privado = 1
+    WHERE co.privado = 1;
 ```
 Uno:
 ```sql
     SELECT co.id_comentario co.contenido co.privado co.id_cuenta c.id_tipo_cuenta
     FROM comentario co
     INNER JOIN cuenta c ON co.id_cuenta = c.id_cuenta
-    WHERE co.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    WHERE co.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 ##### UPDATE
 ```sql
     UPDATE comentario
     SET privado = 1
-    WHERE id_cuenta = 'uuid-cuenta':
+    WHERE id_cuenta = 'uuid-cuenta';
 ```
 ##### DELETE
 ```sql
@@ -680,7 +701,7 @@ Todos:
     FROM actividad_grupo a
     INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
     INNER JOIN grupo g ON a.id_grupo = g.id_grupo
-    INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
+    INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo;
 ```
 Tipo
 ```sql
@@ -689,22 +710,22 @@ Tipo
     INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
     INNER JOIN grupo g ON a.id_grupo = g.id_grupo
     INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
-    WHERE a.ciclo = 2
+    WHERE a.ciclo = 2;
 ```
 Uno:
 ```sql
     SELECT a.id_actividad_grupo a.id_actividad a.id_grupo a.id_ciclo a.fecha_de_entrega ac.nombre
     FROM actividad_grupo a
     INNER JOIN actividad ac ON a.id_actividad = ac.id_actividad
-    WHERE a.id_actividad = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
     INNER JOIN grupo g ON a.id_grupo = g.id_grupo
     INNER JOIN ciclo ci ON a.id_ciclo = ci.id_ciclo
+    WHERE a.id_actividad = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 ##### UPDATE
 ```sql
     UPDATE actividad_grupo
     SET fecha de entrega = '2026-06-13 10:00:00'
-    WHERE id_actividad_grupo = 'uuid-actividad_grupo':
+    WHERE id_actividad_grupo = 'uuid-actividad_grupo';
 ```
 ##### DELETE
 ```sql
@@ -724,29 +745,29 @@ Todos:
     SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
     FROM entrega e
     INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
-    INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+    INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta;
 ```
 Tipo
 ```sql
     SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
     FROM entrega e
     INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
-    WHERE id_actividad_grupo = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
     INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+        WHERE id_actividad_grupo = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 Uno:
 ```sql
     SELECT e.id_entrega e.id_actividad_grupo e.id_cuenta c.nombre e.entrergado e.created_at
     FROM entrega e
     INNER JOIN actividad_grupo ag ON e.id_actividad_grupo = ag.id_actividad_grupo
-    WHERE id_entrega = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
     INNER JOIN cuenta c ON e.id_cuenta = c.id_cuenta
+        WHERE id_entrega = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 ##### UPDATE
 ```sql
     UPDATE entrega
     SET entregado = 1
-    WHERE id_entrega = 'uuid-entrega':
+    WHERE id_entrega = 'uuid-entrega';
 ```
 ##### DELETE
 ```sql
@@ -774,12 +795,12 @@ todos
 ```sql
     UPDATE archivo SET nombre = 'nuevo_nombre.pdf' WHERE id_archivo = 'uuid-archivo';
     SET subidos = 1
-    WHERE id_archivo = 'uuid-archivo'
+    WHERE id_archivo = 'uuid-archivo';
 ```
 #### DELETE 
 ```sql
     DELETE FROM archivo
-    WHERE id_archivo = "uuid-archivo"
+    WHERE id_archivo = "uuid-archivo";
 
 ```
 #### Entidad: cuestionario
@@ -793,27 +814,27 @@ Todos:
 ```sql
     SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
     FROM cuestionario cu
-    INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
+    INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo;
 ```
 Tipo
 ```sql
     SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
     FROM cuestionario cu
     INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
-    WHERE id_ciclo_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    WHERE id_ciclo_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 Uno:
 ```sql
     SELECT cu.id_cuestionario cu.id_ciclo_cuenta cu.enlace
     FROM cuestionario cu
     INNER JOIN ciclo_cuenta cc ON cu.id_ciclo_cuenta = cc.id_actividad_grupo
-    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 ##### UPDATE
     ```sql
         UPDATE cuestionario
         SET enlace = 'https://.......'
-        WHERE id_cuestionario = 'uuid-entrega':
+        WHERE id_cuestionario = 'uuid-entrega';
     ```
 ##### DELETE
 ```sql
@@ -823,24 +844,39 @@ Uno:
 ### ENTIDAD: retroalimentacion_cuestionario
 ### CREATE
 ```sql
-    INSERT INTO retroalimentacion_cuestionario (id_)
+    INSERT INTO retroalimentacion_cuestionario (id_cuestionario, id_ciclo_cuenta, respuesta)
+    VALUES ('uuid-cuestionario', 'uuid-ciclo-cuenta', 'El tema estuvo muy claro');
     
 ```
 ### READ
+Todos
 ```sql
-    
+    SELECT c.nombre alumno, cu.enlace, rc.respuesta, rc.created_at
+    FROM retroalimentacion_cuestionario rc
+    INNER JOIN cuestionario cu ON rc.id_cuestionario = cu.id_cuestionario
+    INNER JOIN ciclo_cuenta cc ON rc.id_ciclo_cuenta = cc.id_ciclo_cuenta
+    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta;
+```
+Uno
+```sql
+    SELECT c.nombre alumno, cu.enlace, rc.respuesta, rc.created_at
+    FROM retroalimentacion_cuestionario rc
+    INNER JOIN cuestionario cu ON rc.id_cuestionario = cu.id_cuestionario
+    INNER JOIN ciclo_cuenta cc ON rc.id_ciclo_cuenta = cc.id_ciclo_cuenta
+    INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+    WHERE rc.id_retroalimentacion = 'uuid-retroalimentacion';
 ```
 ### UPDATE
 ```sql
     UPDATE retroalimentacion_cuestionario
     SET ver retroalimentacion = 'Ver resultados de retroalimentacion'
-    WHERE id_retroalimentacion_cuestionario = 'uuid-retroalimentacion_cuestionario'
+    WHERE id_retroalimentacion_cuestionario = 'uuid-retroalimentacion_cuestionario';
     
 ```
 ### DELETE
 ```sql
     DELETE FROM retroalimentacion_cuestionario
-    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890
+    WHERE id_cuestionario = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890;
     
 ```
 
@@ -856,7 +892,7 @@ Todos:
     SELECT ra.id_actividad_grupo, ra.id_cuenta, ra.valoracion, ra.pregunta1, ra.pregunta2, ra.pregunta3, ra.pregunta4
     FROM ra
     INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
-    INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
+    INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta;
 ```
 Tipo
 ```sql
@@ -864,15 +900,15 @@ Tipo
     FROM ra
     INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
     INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
-    WHERE ra.pregunta1 = 1
+    WHERE ra.pregunta1 = 1;
 ```
 Uno:
 ```sql
     SELECT ra.id_actividad_grupo, ra.id_cuenta, ra.valoracion, ra.pregunta1, ra.pregunta2, ra.pregunta3, ra.pregunta4
-    FROM ra
+    FROM retroalimentacion_alumno ra
     INNER JOIN actividad_grupo ag ON ra.id_actividad_grupo = ag.id_actividad_grupo
     INNER JOIN cuenta c ON ra.id_cuenta = c.id_cuenta
-    WHERE ra.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    WHERE ra.id_cuenta = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 ```
 ##### UPDATE
 ```sql
