@@ -6,7 +6,7 @@ function grupo_valido($grupo){
     $grupos = ['61-A', '61-B', '61-C', '61-D', '62-A', '62-B', '62-C' ];
 
     // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
-    if (!in_array($grupoo, $grupos) )
+    if (!in_array($grupo, $grupos) )
         return false;
 
     return true;
@@ -77,10 +77,10 @@ function validar_correo($email){
     }       
 }
 
-function validar_numero($edad){
+function validar_numero($numero){
 
-    if(filter_var($edad, FILTER_SANITIZE_NUMBER_INT))
-        echo "La edad '$email' es válida.\n"; 
+    if(filter_var($numero, FILTER_SANITIZE_NUMBER_INT))
+        echo "La edad '$numero' es válida.\n"; 
 
 }
 
