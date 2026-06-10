@@ -1,35 +1,37 @@
 <?php
     include 'include/db.php';
     include 'include/validacion.php';
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        
+        $nombre  =$_POST["usuario"];
+        $correo = $_POST["correo"];
+        $contrasena = $_POST["password"];
+        $grupo = $_POST['grupo'];
+        $user = $_POST['tipo_us'];
 
-    $valido = true;
-    $nombre = $_POST["usuario"];
-    $correo = $_POST["correo"];
-    $contrasena = $_POST["password"];
-    $grupo = $_POST['grupo'];
-    $user = $_POST['tipo_us'];
+        grupo_valido($grupo);
+        usuario_valido($user);
+        $nombre_s = sanitizar_entrada(connect(),$nombre);
+        $correo_s = sanitizar_entrada(connect(),$correo);
+        $correo_valido = validar_correo($correo_s);
+        $contrasena_valida = validacion_contrasena($contrasena);
 
-    grupo_valido($grupo);
-    usuario_valido($user);
-    $nombre_s = sanitizar_entrada(connect(),$nombre);
-    $correo_s = sanitizar_entrada(connect(),$correo);
-    $correo_valido = validar_correo($correo_s);
-    $contrasena_valida = validacion_contrasena($contrasena);
+        $hash = hashear_password($contrasena);
 
-    $hash = hashear_password($contrasena);
+        if($contrasena_valida == true && $correo_valido == true){
+            $cuenta_nueva = "INSERT INTO cuenta(id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
+            VALUES (UUID(), '$nombre_s', '$correo_s',$hash ,$user)";
 
-    if($contrasena_valida == true && $correo_valido == true){
-        $cuenta_nueva = "INSERT INTO cuenta(id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
-        VALUES (UUID(), '$nombre_s', '$correo_s',$hash ,$user)";
-
-        $query = mysqli_query(connect(), $cuenta_nueva);
-        if($query){
-            echo "La cuenta se creo con exito";
+            $query = mysqli_query(connect(), $cuenta_nueva);
+            if($query){
+                echo "La cuenta se creo con exito";
+            }
+        }
+        else{
+            echo "datos rechazados";
+        }
+    
     }
-    else{
-        echo "datos rechazados";
-    }
- 
 ?>
 
 
