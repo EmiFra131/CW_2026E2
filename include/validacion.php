@@ -1,17 +1,28 @@
 <?php
 
-/*
-function esOpcionValida($genero){
+
+function grupo_valido($grupo){
     // Opciones permitidas en el SELECT de Género
-    $generosPermitidos = ['Masculino', 'Femenino', 'Otro'];
+    $grupos = ['61-A', '61-B', '61-C', '61-D', '62-A', '62-B', '62-C' ];
 
     // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
-    if (!in_array($genero, $generosPermitidos)) 
+    if (!in_array($grupoo, $grupos) )
         return false;
 
     return true;
 }
-*/
+
+function usuario_valido($user){
+    // Opciones permitidas en el SELECT de Género
+    $usuarios = ['alumno','profesor','admin'];
+
+    // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
+    if (!in_array($user, $usuarios) )
+        return false;
+
+    return true;
+}
+
 
 function validacion_contrasena($pass) {
     if (strlen($pass) < 6)
@@ -58,8 +69,12 @@ function sanitizar_entrada($conexion, $datos) {
 
 function validar_correo($email){
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) 
-        echo "El correo '$email' es válido.\n";
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)){
+        return true;
+    }  
+    else{
+        return false;
+    }       
 }
 
 function validar_numero($edad){
