@@ -499,8 +499,8 @@ Todos:
     INNER JOIN ciclo_escolar c
         ON g.id_ciclo = c.id_ciclo
    
-
 ```
+
 Tipo
 ```sql
     SELECT g.id_grupo, g.nombre_grupo, t.turno, c.periodo
