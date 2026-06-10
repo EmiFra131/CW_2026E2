@@ -1,8 +1,11 @@
 <?php
     include 'include/db.php';
     include 'include/validacion.php';
+
+    $con = connect();
+
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-        
+
         $nombre  =$_POST["usuario"];
         $correo = $_POST["correo"];
         $contrasena = $_POST["password"];
@@ -11,8 +14,8 @@
 
         grupo_valido($grupo);
         usuario_valido($user);
-        $nombre_s = sanitizar_entrada(connect(),$nombre);
-        $correo_s = sanitizar_entrada(connect(),$correo);
+        $nombre_s = sanitizar_entrada($con,$nombre);
+        $correo_s = sanitizar_entrada($con,$correo);
         $correo_valido = validar_correo($correo_s);
         $contrasena_valida = validacion_contrasena($contrasena);
 
@@ -20,9 +23,9 @@
 
         if($contrasena_valida == true && $correo_valido == true){
             $cuenta_nueva = "INSERT INTO cuenta(id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
-            VALUES (UUID(), '$nombre_s', '$correo_s',$hash ,$user)";
+            VALUES (UUID(), '$correo_s','$nombre_s', $hash ,'$user')";
 
-            $query = mysqli_query(connect(), $cuenta_nueva);
+            $query = mysqli_query($con, $cuenta_nueva);
             if($query){
                 echo "La cuenta se creo con exito";
             }
