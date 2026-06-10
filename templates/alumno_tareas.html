@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin_grupos</title>
-    <link rel="stylesheet" href="../statics/styles/alumno_tareas.css"
+    <title>Estudiante</title>
+    <link rel="stylesheet" href="css/alumno_tareas.css">
 </head>
 <body>
-    <nav>
-        <img src="../statics/img/unam.png" alt="Universidad Nacional Autonoma De Mexico" id="unam">
-        <img src="../statics/img/enp.svg" alt="Escuela Nacional Preparatoria 6">
-        <img src="../statics/img/ete.png" alt="Estudios Tecnicos Especializados" id="ete">
-    </nav>
-    <div id="ruta">
-        <p><strong>ALUMNO>TAREAS</strong></p>
-    </div>
-    <aside id="barra_lateral">
-        <div class="tarea">
-            <div>A</div>
-            <p>Tarea 1: Descripcion</p>
-        </div>
-        <div class="tarea">
-            <div>A</div>
-            <p>Tarea 2: Descripcion</p>
-        </div>
-        <div class="tarea">
-            <div>A</div>
-            <p>Tarea 2: Descripcion</p>
-        </div>
+    <header class="logos">
+        <div class="img-logos">
+            <img id="unam"src="img/unam.jpg">
+            <img src="img/enp.jpg">
+            <img id="ete"src="img/ete.png">
+            <div class="usuario">
+                <h1>Alumnos</h1>
+            </div>
+            <section class="seccion">Tareas</section>
+            </div>
+    </header>
+<body>
+    <aside class="datos">
+        <h2>Tareas</h2>
+        <button class="boton_tarea">TAREA 1: DESCRIPCIÓN</button>
+        <button class="boton_tarea">TAREA 2: DESCRIPCIÓN</button>
     </aside>
-    <div id="calif"> Calificacion 0/100</div>
-    <h1 id="titulo">Tarea 1</h1>
-    <p id="desc">Descripcion de la tarea</p>
-
+    <h2 class="tarea">Tarea 1:</h2>
+    <img id ="logo_tarea" src = "img\tarea_icono.png">
+    <p>Descripción de la tarea</p>
     <div class="grupo">
         <button class="boton">Enviar Asignacion</button>
-        <button class="boton">Adjuntar Archivos</button>
-        <!-- Boton de adjuntar fotos por si es posible -->
+        <form>
+            <label class="boton" id="imgs" for ="adjuntar">Adjuntar archivos e imágenes:</label>
+            <input  class = "boton" type="file" id="Agregar" name="alumno_tarea"><br>
+        </form>
+
     </div>
 </body>
 </html>

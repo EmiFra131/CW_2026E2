@@ -50,7 +50,15 @@
 - Comentar las entregas
 - Ver comentarios
 
+
+### satec/profesor/tipo_apren.php
+- registro de respuestas 
+- tipos de aprendizaje registrados 
+
+
 ### satec/alumno/tipo_apren.php
 - Contestar encuesta sobre tipos de aprendizaje
 - Conocer su tipo de aprendizaje
+
+
 
