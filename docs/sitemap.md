@@ -62,3 +62,24 @@
 
 
 
+- Aregar descripciones, titulo o archivos adjuntos
+- Publicar anuncios o comentarios públicos o privados
+
+### satec/profesor/revisar_tareas
+- Revisar el trabajo entregado
+- Calificar las entreas
+- Comentar las entregas
+- Ver comentarios
+
+
+### satec/profesor/tipo_apren.php
+- registro de respuestas 
+- tipos de aprendizaje registrados 
+
+
+### satec/alumno/tipo_apren.php
+- Contestar encuesta sobre tipos de aprendizaje
+- Conocer su tipo de aprendizaje
+
+
+
