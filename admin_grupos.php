@@ -3,6 +3,16 @@
     include 'include/db.php';
     include 'include/validacion.php';
 
+    $gruposelec = "";
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        $edit = true;
+        $grupo_selec = $_POST['grupo_act'];
+    }
+    else{
+        $edit = false;
+    }
+
     $con = connect();
 
     $gruposquery = "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
@@ -52,12 +62,42 @@
 
         <?php
             foreach($grupos as $grupo){
-                echo '<div class="grupo">
-                    <h3> Grupo'.$grupo.'</h3>
-                    <button class="boton"> Ver integrantes </button>
-                    <br>
-                    <button class="boton"> Contactar Profesor </button>
-                </div>';
+
+                if(!$edit){
+                    echo '<div class="grupo">
+                        <h3> Grupo'.$grupo.'</h3>
+                        <form action="integrantes_grupo.php ">
+                            <button type="submit" class="boton"> ver interantes </button>
+                        </form>
+                        <br>
+                        <form action="admin_grupos.php" method="post" name='.$grupo.'>
+                            <input type="hidden" name="grupo_act" value='.$grupo.'> 
+                            <button type="submit" class="boton"> Editar </button>
+                        </form>
+                    </div>';
+                }
+                else{
+                    if($grupo == $grupo_selec){
+                        echo '<div class="grupo">
+                            <form action="admin_grupos.php" method="post" name='.$grupo.'>
+                                <div>
+                                    <label for="nombre">Cambiar el nombre del grupo:</label>
+                                    <input id="nombre" name="nombre" type="text" placeholder='.$grupo.' required>
+                                </div>
+                                <div>
+                                    <label for="turno">turno</label>
+                                    <select name="turno" id="turno" required>
+                                        <option value="" disabled selected>Escoge el nuevo turno para el grupo</option>
+                                        <option value="matutino">matutino</option>
+                                        <option value="vespertino">vespertino</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="boton">Guardar</button>
+                            </form>
+                        </div>';
+                    }
+                     
+                }
             }
             
         ?>

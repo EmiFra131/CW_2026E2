@@ -1,9 +1,6 @@
 <?php
     include 'include/db.php';
     include 'include/validacion.php';
-   
-
-    
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         
