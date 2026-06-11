@@ -1,10 +1,52 @@
+<?php
+    include 'include/db.php';
+    include 'include/validacion.php';
+
+    $con = connect();
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+        $grupo = $_POST['grupo_act'];
+
+    }
+
+    $alumnos_query = 
+    "SELECT cc.id_ciclo_cuenta, c.nombre, t.rol, g.nombre_grupo, g.id_turno, ce.periodo
+    FROM ciclo_cuenta cc
+    INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
+    INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
+    INNER JOIN grupo         g  ON cc.id_grupo = g.id_grupo
+    INNER JOIN ciclo_escolar ce ON cc.id_ciclo = ce.id_ciclo
+    WHERE g.nombre_grupo = '$grupo'";
+    
+    $query = mysqli_query($con, $alumnos_query);
+
+    if($query){
+        $id = [];
+        $nombres = [];
+        $roles = [];
+        $nombres_grupo = [];
+        $turnos = [];
+        $periodos = [];
+
+        while($fila = mysqli_fetch_assoc($query)){
+            $id[] = $fila['id_ciclo_cuenta'];
+            $nombres[] = $fila['nombre'];
+            $roles[] = $fila['rol'];
+            $nombres_grupos[] = $fila['nombre_grupo'];
+            $turnos[] = $fila['turno'];
+            $periodos[] = $fila['periodo'];
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Visual</title>
-        <link rel="stylesheet" href="../statics/styles/admin_style.css">
+        <link rel="stylesheet" href="statics/styles/admin_style.css">
     </head>
     <body>
         <nav>
@@ -18,7 +60,9 @@
         </nav>
 
         <header>
-            <h1>Administrador > Grupo 61B</h1>
+            <?php
+                echo "<h1>Administrador > Grupo $grupo</h1>"
+            ?>
         </header>
 
         <div class="contenido_principal">
@@ -31,24 +75,15 @@
             </div>
 
             <div class="seccion_alumno">
-                <div class="fila_alumno">
-                    <span>Nombre</span>
-                    <span>Grupo</span>
-                    <span>No. Cuenta</span>
-                    <span>🗑️</span>
-                </div>
-                <div class="fila_alumno">
-                    <span>Nombre</span>
-                    <span>Grupo</span>
-                    <span>No. Cuenta</span>
-                    <span>🗑️</span>
-                </div>
-                <div class="fila_alumno fila_activa">
-                    <span>Nombre</span>
-                    <span>Grupo</span>
-                    <span>No. Cuenta</span>
-                    <span>🗑️</span>
-                </div>
+                <?php
+                    foreach($nombres as $nombre){
+                        echo "<div class=fila_alumno>
+                            <span>'$nombre'</span>
+                            <span>$grupo</span>
+                            <span>🗑️</span>
+                        </div>";
+                    }
+                ?>
                 <div class="boton_agregar">
                     <span>➕ Agregar miembros</span>
                 </div>
