@@ -93,21 +93,11 @@ function hashear_password($pass){
     return $password_hasheada;
 }
 
-
-function validar_password($passLogin){
-
-    // Traemos el hash que está guardado en la Base de Datos para ese usuario
-    // (Imaginemos que ya hicimos el SELECT y lo guardamos en esta variable)
-    $hash_base_de_datos = '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890...'; 
-
-    // Compara la contraseña limpia con el hash
-    if (password_verify($passLogin, $hashDeLaBaseDeDatos)) 
-        echo "¡Contraseña correcta! Bienvenido al sistema.";        
-    else 
-        echo "Contraseña incorrecta. Inténtalo de nuevo.";
-    
+/*
+function validar_password($pass_login, $hash_base_de_datos){
+    password_verify($passLogin, $hash_base_de_datos)
 }
-
+*/
 ?>
 
 
