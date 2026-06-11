@@ -18,7 +18,7 @@
         $grupos = [];
         $turno = [];
         $periodo = [];
-        while($fila = mysqli_fetch_assoc($result)){
+        while($fila = mysqli_fetch_assoc($query)){
             $id[] = $fila['id_grupo'];
             $grupos[] = $fila['nombre_grupo'];
             $turno[] = $fila['turno'];
@@ -49,6 +49,15 @@
         <p><strong>Administrador</strong></p>
     </div>
     <div id="contenedor">
+
+        <?php
+            echo '<div class="grupo">
+                <h3>Grupo 61 A</h3>
+                <button class="boton"> Ver integrantes </button>
+                <br>
+                <button class="boton"> Contactar Profesor </button>
+            </div>'
+        ?>
         <div class="grupo">
             <h3>Grupo 61 A</h3>
             <button class="boton"> Ver integrantes </button>
