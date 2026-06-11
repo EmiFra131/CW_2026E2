@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Visual</title>
-        <link rel="stylesheet" href="../static/styles/admin_style.css">
+        <link rel="stylesheet" href="../statics/styles/admin_style.css">
     </head>
     <body>
         <nav>
