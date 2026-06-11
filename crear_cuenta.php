@@ -1,11 +1,13 @@
 <?php
     include 'include/db.php';
     include 'include/validacion.php';
+   
 
-    $con = connect();
+    
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-
+        
+        $con = connect();
         $nombre  =$_POST["usuario"];
         $correo = $_POST["correo"];
         $contrasena = $_POST["password"];
@@ -26,12 +28,20 @@
         $hash = hashear_password($contrasena);
 
         if($contrasena_valida == true && $correo_valido == true){
-            if($user = "alumno")
+            $id = null;
+            if($user == "alumno")
                 $id = 1;
-            if($user = "profesor")
+            if($user == "profesor")
                 $id = 2;
-            if($user = "admin")
+            if($user == "admin")
                 $id = 3;
+
+            if($id == null){
+                echo "Rol invalido";
+                exit();
+            }
+
+
             
             $cuenta_nueva = "INSERT INTO cuenta(id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
             VALUES (UUID(), '$correo_s','$nombre_s', '$hash' ,$id)";
@@ -39,6 +49,8 @@
             $query = mysqli_query($con, $cuenta_nueva);
             if($query){
                 echo "La cuenta se creo con exito";
+                //header("Location: index.php?registro=exitoso");
+                //exit();
             }
         }
         else{
