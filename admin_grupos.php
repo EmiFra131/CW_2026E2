@@ -3,17 +3,47 @@
     include 'include/db.php';
     include 'include/validacion.php';
 
-    $gruposelec = "";
+    $con = connect();
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $edit = true;
-        $grupo_selec = $_POST['grupo_act'];
+        if(isset($_POST['grupo_act']))
+            $grupo_selec = $_POST['grupo_act'];
+        else
+            $grupo_selec = "";
+
+        if(isset($_POST["grupo_ant"])){
+            $nombre = $_POST['nombre'];
+            $turno = $_POST['turno'];
+            $nombre_s = sanitizar_entrada($con,$nombre);
+            $t_valido = turno_valido($turno);
+
+            if($t_valido){
+                $anterior = $_POST['grupo_ant'];
+
+                if($turno == "matutino")
+                    $idt = 1;
+                else
+                    $idt = 2;
+
+                $editar_grupo = "UPDATE grupo SET nombre_grupo = '$nombre_s', id_turno = $idt  
+                WHERE nombre_grupo = '$anterior'";
+
+                $query = mysqli_query($con, $editar_grupo);
+
+                if($query){
+                    echo "Grupos actualizados";
+                    $edit = false;
+                }
+                else{
+                    echo "fallo en el query";
+                }
+            }
+        }
     }
     else{
         $edit = false;
     }
-
-    $con = connect();
 
     $gruposquery = "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
     FROM grupo g
@@ -70,7 +100,7 @@
                             <button type="submit" class="boton"> ver interantes </button>
                         </form>
                         <br>
-                        <form action="admin_grupos.php" method="post" name='.$grupo.'>
+                        <form action="admin_grupos.php" method="post">
                             <input type="hidden" name="grupo_act" value='.$grupo.'> 
                             <button type="submit" class="boton"> Editar </button>
                         </form>
@@ -79,7 +109,7 @@
                 else{
                     if($grupo == $grupo_selec){
                         echo '<div class="grupo">
-                            <form action="admin_grupos.php" method="post" name='.$grupo.'>
+                            <form action="admin_grupos.php" method="post">
                                 <div>
                                     <label for="nombre">Cambiar el nombre del grupo:</label>
                                     <input id="nombre" name="nombre" type="text" placeholder='.$grupo.' required>
@@ -91,6 +121,9 @@
                                         <option value="matutino">matutino</option>
                                         <option value="vespertino">vespertino</option>
                                     </select>
+                                </div>
+                                <div>
+                                    <input id="grupo_ant" name="grupo_ant" type="hidden" value='.$grupo.'>
                                 </div>
                                 <button type="submit" class="boton">Guardar</button>
                             </form>
