@@ -1,10 +1,43 @@
+ <?php
+
+    include 'include/db.php';
+    include 'include/validacion.php';
+
+    $con = connect();
+
+    $gruposquery = "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
+    FROM grupo g
+    INNER JOIN turno t ON g.id_turno = t.id_turno
+    INNER JOIN ciclo_escolar ce ON g.id_ciclo = ce.id_ciclo";
+
+    $query = mysqli_query($con, $gruposquery);
+
+    if($query){
+
+        $id = [];
+        $grupos = [];
+        $turno = [];
+        $periodo = [];
+        while($fila = mysqli_fetch_assoc($result)){
+            $id[] = $fila['id_grupo'];
+            $grupos[] = $fila['nombre_grupo'];
+            $turno[] = $fila['turno'];
+            $periodo[] = $fila['periodo'];
+        }
+        
+    }
+    else{
+        echo "NADA";
+    }
+ ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>admin_grupos</title>
-    <link rel="stylesheet" href="../statics/styles/admin_grupos.css">
+    <link rel="stylesheet" href="statics/styles/admin_grupos.css">
 </head>
 <body>
     <nav>
