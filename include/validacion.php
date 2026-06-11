@@ -1,7 +1,7 @@
 <?php
 
 
-function grupo_valido($grupo){
+function grupo_valido($grupo){  //Cambiar con una peticion sql para mantener los grpos actualizados con el servidor
     // Opciones permitidas en el SELECT de Género
     $grupos = ['61-A', '61-B', '61-C', '61-D', '62-A', '62-B', '62-C' ];
 
@@ -18,6 +18,17 @@ function usuario_valido($user){
 
     // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
     if (!in_array($user, $usuarios) )
+        return false;
+
+    return true;
+}
+
+function turno_valido($turno){
+    // Opciones permitidas en el SELECT de Género
+    $turnos = ['matutino', 'vespertino'];
+
+    // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
+    if (!in_array($turno, $turnos) )
         return false;
 
     return true;
