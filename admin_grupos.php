@@ -32,11 +32,7 @@
                 $query = mysqli_query($con, $editar_grupo);
 
                 if($query){
-                    echo "Grupos actualizados";
                     $edit = false;
-                }
-                else{
-                    echo "fallo en el query";
                 }
             }
         }
