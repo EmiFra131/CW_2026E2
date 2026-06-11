@@ -12,8 +12,12 @@
         $grupo = $_POST['grupo'];
         $user = $_POST['tipo_us'];
 
-        grupo_valido($grupo);
-        usuario_valido($user);
+        //grupo_valido($grupo);
+        //usuario_valido($user);
+        if(!grupo_valido($grupo) || !usuario_valido($user)){    //verificacion de datos :p//
+            echo "Datos invalidos";
+            exit();
+        }
         $nombre_s = sanitizar_entrada($con,$nombre);
         $correo_s = sanitizar_entrada($con,$correo);
         $correo_valido = validar_correo($correo_s);
@@ -22,8 +26,15 @@
         $hash = hashear_password($contrasena);
 
         if($contrasena_valida == true && $correo_valido == true){
+            if($user = "alumno")
+                $id = 1;
+            if($user = "profesor")
+                $id = 2;
+            if($user = "admin")
+                $id = 3;
+            
             $cuenta_nueva = "INSERT INTO cuenta(id_cuenta, correo, nombre, contraseña, id_tipo_usuario)
-            VALUES (UUID(), '$correo_s','$nombre_s', $hash ,'$user')";
+            VALUES (UUID(), '$correo_s','$nombre_s', '$hash' ,$id)";
 
             $query = mysqli_query($con, $cuenta_nueva);
             if($query){
@@ -72,7 +83,7 @@
             <label for="tipo_us">usuario</label>
             <select name="tipo_us" id="tipo_us" required>
                 <option value="" disabled selected>Cual es tu rol en el ETE?</option>
-                <option value="estudiante">estudiante</option>
+                <option value="alumno">alumno</option>
                 <option value="profesor">profesor</option>
                 <option value="admin">administrador</option>
             </select>
