@@ -51,31 +51,16 @@
     <div id="contenedor">
 
         <?php
-            echo '<div class="grupo">
-                <h3>Grupo 61 A</h3>
-                <button class="boton"> Ver integrantes </button>
-                <br>
-                <button class="boton"> Contactar Profesor </button>
-            </div>'
+            foreach($grupos as $grupo){
+                echo '<div class="grupo">
+                    <h3> Grupo'.$grupo.'</h3>
+                    <button class="boton"> Ver integrantes </button>
+                    <br>
+                    <button class="boton"> Contactar Profesor </button>
+                </div>';
+            }
+            
         ?>
-        <div class="grupo">
-            <h3>Grupo 61 A</h3>
-            <button class="boton"> Ver integrantes </button>
-            <br>
-            <button class="boton"> Contactar Profesor </button>
-        </div>
-        <div class="grupo">
-            <h3>Grupo 61 A</h3>
-            <button class="boton"> Ver integrantes </button>
-            <br>
-            <button class="boton"> Contactar Profesor </button>
-        </div>
-        <div class="grupo">
-            <h3>Grupo 61 A</h3>
-            <button class="boton"> Ver integrantes </button>
-            <br>
-            <button class="boton"> Contactar Profesor </button>
-        </div>
     </div>
 </body>
 </html>
