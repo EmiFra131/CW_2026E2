@@ -92,7 +92,8 @@
                 if(!$edit){
                     echo '<div class="grupo">
                         <h3> Grupo'.$grupo.'</h3>
-                        <form action="admin_visual.php ">
+                        <form action="admin_visual.php" method="post">\
+                            <input type="hidden" name="grupo_act" value='.$grupo.'> 
                             <button type="submit" class="boton"> ver interantes </button>
                         </form>
                         <br>
