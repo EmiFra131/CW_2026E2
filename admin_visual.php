@@ -35,7 +35,7 @@
 
             $user = $_POST["usuario_id"];
 
-            $query_edit = "SELECT cc.id_ciclo_cuenta, c.correo, c.nombre, c.contraseña, t.rol, g.nombre_grupo
+            $query_edit = "SELECT cc.id_ciclo_cuenta, c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol, g.nombre_grupo
             FROM ciclo_cuenta cc
             INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
             INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
@@ -53,6 +53,7 @@
                 $roles_edit = $coincidencia['rol'];
                 $nombres_grupo_edit = $coincidencia['nombre_grupo'];
                 $contrseña_edit = $coincidencia['contraseña'];
+                $cuenta = $coincidencia['id_cuenta'];
 
                 echo "consulta exitosa";
             }
@@ -90,6 +91,38 @@
                 $contra = $_POST['password'];
                 if(validacion_contrasena($contra)){
                     $hash = hashear_password($contra);
+                }
+            }
+
+            if($correo_valido && $usuario_valido){
+                $id_us = null;
+                if($tipo_us == "alumno")
+                    $id_us = 1;
+                if($tipo_us == "profesor")
+                    $id_us = 2;
+                if($tipo_us == "admin")
+                    $id_us = 3;
+
+                if($id_us == null){
+                    echo "Rol invalido";
+                    exit();
+                }
+
+                if($_POST['coorreo'] == null || $_POST['usuario'] == null|| $_POST['grupo'] == null || $_POST['tipo_us'] == null || $_POST["password"]== null){
+
+                    $act_datos = "UPDATE cuenta
+                    SET correo = '$correo_s', nombre = '$nombre_edit_s, contraseña = $hash, id_tipo_usuario = $id_us'
+                    WHERE id_cuenta = '$cuenta'";
+
+                    $query_act = mysqli_query($con, $act_datos);
+
+                    if($query_act){
+                        $act_datos2 = "UPDATE ciclo_cuenta
+                        SET id_grupo = 2
+                        WHERE id_ciclo_cuenta = 'b2c3d4e5-f6a7-8901-bcde-f12345678901';"
+                    }
+
+                    
                 }
             }
 
