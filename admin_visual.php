@@ -80,7 +80,7 @@
     INNER JOIN ciclo_escolar ce ON cc.id_ciclo = ce.id_ciclo
     WHERE g.nombre_grupo = '$grupo' AND t.rol = 'profesor'";
 
-    $query_prof = mysqli_query($con, $alumnos_query);
+    $query_prof = mysqli_query($con, $profesor_query);
 
     $resultado = mysqli_fetch_assoc($query_prof);
 
@@ -136,21 +136,21 @@
 
             <div class="seccion_alumno">
                 <?php
-                    if(!$crear&&!$editar&&!$borrar)
-                        echo "oki";
+                    if(!$crear&&!$editar&&!$borrar){
                         foreach($nombres as $nombre){
                             echo "<div class=fila_alumno>
                                 <span>'$nombre'</span>
                                 <span>$grupo</span>
                             </div>";
                         }
+                    }
                     if($editar){
                        foreach($alumnos as $alumno){
                             echo "<div class=fila_alumno>
-                                <span>".$alumno['id_usuario_cuenta']."</span>
+                                <span>".$alumno['id_ciclo_cuenta']."</span>
                                 <span>".$alumno['nombre']."</span>
                                 <form action='admin_visual.php' method='post'>
-                                    <input type= hidden name= us_editar value= ".$alumno['id_usuario_cuenta'].">
+                                    <input type= hidden name= us_editar value= ".$alumno['id_ciclo_cuenta'].">
                                     <button type= submit >➕ editar</button>
                                 </form>
                             </div>";
