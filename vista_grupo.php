@@ -2,18 +2,29 @@
 session_start();
 include './include/db.php';
 
+/*
 if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
+*/
 
 $con = connect();
+$id_grupo = $_GET["id"];
 
-$query = "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
-          FROM grupo g
-          INNER JOIN turno t ON g.id_turno = t.id_turno
-          INNER JOIN ciclo_escolar ce ON g.id_ciclo = ce.id_ciclo";
-$result = mysqli_query($con, $query);
+$query_grupo = "SELECT g.nombre_grupo, t.turno
+                FROM grupo g
+                INNER JOIN turno t ON g.id_turno = t.id_turno
+                WHERE g.id_grupo = $id_grupo";
+$result_grupo = mysqli_query($con, $query_grupo);
+$grupo = mysqli_fetch_assoc($result_grupo);
+
+$query_alumnos = "SELECT c.id_cuenta, c.nombre, c.correo
+                  FROM ciclo_cuenta cc
+                  INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+                  INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
+                  WHERE cc.id_grupo = $id_grupo AND t.rol = 'Alumno'";
+$result_alumnos = mysqli_query($con, $query_alumnos);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -35,7 +46,7 @@ $result = mysqli_query($con, $query);
 </div>
 
 <div class="barra_azul">
-    PROFESOR > GRUPOS
+    PROFESOR > GRUPO <?php echo $grupo["nombre_grupo"]; ?>
 </div>
 
 <div class="menu_lateral">
@@ -55,13 +66,13 @@ $result = mysqli_query($con, $query);
     <br><br>
     <table class="tabla_alumnos">
         <?php
-        while ($grupo = mysqli_fetch_assoc($result)) {
+        while ($alumno = mysqli_fetch_assoc($result_alumnos)) {
             echo "<tr class='fila_alumno'>";
             echo "<td class='col_icono'><div class='avatar'>👤</div></td>";
+            echo "<td>" . $alumno["nombre"] . "</td>";
             echo "<td>" . $grupo["nombre_grupo"] . "</td>";
-            echo "<td>" . $grupo["turno"] . "</td>";
-            echo "<td>" . $grupo["periodo"] . "</td>";
-            echo "<td><a href='vista_grupo.php?id=" . $grupo["id_grupo"] . "' class='enlace'>Ver más</a></td>";
+            echo "<td>" . $alumno["correo"] . "</td>";
+            echo "<td><a href='alumno_tareas.php?id=" . $alumno["id_cuenta"] . "' class='enlace'>Ver más</a></td>";
             echo "</tr>";
         }
         ?>
@@ -69,7 +80,7 @@ $result = mysqli_query($con, $query);
 </div>
 
 <div class="pie_pagina">
-    Total de grupos: <?php echo mysqli_num_rows($result); ?>
+    Total de alumnos: <?php echo mysqli_num_rows($result_alumnos); ?>
 </div>
 
 </body>
