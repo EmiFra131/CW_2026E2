@@ -5,7 +5,6 @@
     $con = connect();
 
     $seleccion = "";
-    $crear = false;
     $editar = false;
     $borrar = false;
 
@@ -24,10 +23,6 @@
         if(isset($_COOKIE["grupo"]))
             $grupo = $_COOKIE["grupo"];
 
-        if(isset($_POST["crear"])){
-            $crear = true;
-        }
-
         if(isset($_POST["editar"])){
             $editar = true;
         }
@@ -35,6 +30,72 @@
         if(isset($_POST["borrar"])){
             $borrar = true;
         }
+
+        if(isset($_POST["usuario_id"])){
+
+            $user = $_POST["usuario_id"];
+
+            $query_edit = "SELECT cc.id_ciclo_cuenta, c.correo, c.nombre, c.contraseña, t.rol, g.nombre_grupo
+            FROM ciclo_cuenta cc
+            INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
+            INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
+            INNER JOIN grupo         g  ON cc.id_grupo = g.id_grupo
+            WHERE cc.id_ciclo_cuenta = '$user'";
+
+            $consulta_edit = mysqli_query($con,$query_edit);
+
+            $coincidencia = mysqli_fetch_assoc($consulta_edit);
+
+            if($coincidencia !=null){
+                $id_edit = $coincidencia['id_ciclo_cuenta'];
+                $correo = $coincidencia['correo'];
+                $nombre_edit = $coincidencia['nombre'];
+                $roles_edit = $coincidencia['rol'];
+                $nombres_grupo_edit = $coincidencia['nombre_grupo'];
+                $contrseña_edit = $coincidencia['contraseña'];
+
+                echo "consulta exitosa";
+            }
+            
+            if($_POST["correo"] == null)
+                $correo_s = $correo;    
+            else{
+                $correo = $_POST["correo"];
+                $correo_s = sanitizar_entrada($con,$correo);
+                validar_correo($correo_s);
+            }
+                
+            if($_POST["usuario"] == null)
+                $nombre_edit_s = $nombre_edit;
+            else{
+                $nombre_edit = $_POST["usuario"];
+                $nombre_edit_s = sanitizar_entrada($con,$nombre_edit)
+            }
+                
+            if($_POST["grupo"]== null)
+                $grupo_edit = $nombres_grupo_edit;
+            else{
+                $grupo_edit = $_POST['grupo'];
+                $correo_valido = grupo_valido($grupo_edit);
+            }
+            if($_POST["tipo_us"]== null)
+                $tipo_us_edit = $roles_edit;
+            else{
+                $tipo_us_edit = $_POST['tipo_us'];
+                $usuario_valido = usuario_valido($tipo_us_edit);
+            }
+            if($_POST["password"]== null)
+                $contra = $contrseña_edit;
+            else{
+                $contra = $_POST['password'];
+                if(validacion_contrasena($contra)){
+                    $hash = hashear_password($contra);
+                }
+            }
+
+        }
+            
+            
 
     }
 
@@ -136,7 +197,7 @@
 
             <div class="seccion_alumno">
                 <?php
-                    if(!$crear&&!$editar&&!$borrar){
+                    if(!$editar&&!$borrar){
                         foreach($nombres as $nombre){
                             echo "<div class=fila_alumno>
                                 <span>'$nombre'</span>
@@ -149,7 +210,7 @@
                             echo "<div class=fila_alumno>
                                 <span>".$alumno['id_ciclo_cuenta']."</span>
                                 <span>".$alumno['nombre']."</span>
-                                <form action='admin_visual.php' method='post'>
+                                <form action='editar_crear_admin.php' method='post'>
                                     <input type= hidden name= us_editar value= ".$alumno['id_ciclo_cuenta'].">
                                     <button type= submit >➕ editar</button>
                                 </form>
@@ -160,7 +221,7 @@
                 <div class="boton_agregar">
                     <?php
                         if($seleccion){
-                           echo "<form action='admin_visual.php' method='post'>
+                           echo "<form action='editar_crear_admin.php' method='post'>
                                 <input type= hidden name= crear>
                                 <button type= submit >➕ Crear cuenta</button>
                             </form>";
@@ -176,7 +237,7 @@
                         else
                             echo "<form action='admin_visual.php' method='post'>
                                 <input type= hidden name= nuevo>
-                                <button type= submit >➕ Agregar miembros</button>
+                                <button type= submit >➕Editar participantes</button>
                             </form>"
                             
                     ?>
