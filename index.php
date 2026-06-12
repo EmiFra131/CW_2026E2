@@ -51,12 +51,29 @@ if (isset($_POST["correo"])){
         $result = mysqli_query( $con, $query);
         $registro = mysqli_fetch_assoc($result);
 
-        $_SESSION['usuario'] = $registro["correo"];
+        if ($registro){
+    $hash_base_de_datos = $registro["contraseña"];
+    if(password_verify($contraseña, $hash_base_de_datos)){
+        $_SESSION['usuario'] = $registro["id_cuenta"]; 
+        $_SESSION["rol"] = $registro["rol"];
+        $_SESSION["nombre"] = $registro["nombre"];
+        setcookie("usuario", $registro["correo"], time() + (86400));
+
+        // Redirigir según el rol
+        if ($registro["rol"] == "Profesor") {
+            header("Location: profesores-vista.php");
+            exit();
+        }
+    }
+}
+        
+        
+        /*$_SESSION['usuario'] = $registro["correo"];
         $_SESSION["rol"] = $registro["rol"];
         $_SESSION["nombre_completo"] = $registro["nombre"];
         setcookie("usuario", $registro["correo"], time() + (86400)); // 1 dia = 86400 segundos, expirará en un dia
         header("Location: templates/alumno_tareas.html");
-
+*/
     }
 }
 
