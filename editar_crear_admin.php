@@ -81,6 +81,7 @@
                             <label for=password>Deseas cambiar la contraseña del usuario?:</label>
                             <input id=password name=password type=password placeholder= required>
                         </div>
+                        <input type= hidden name= usuario_id value= '$usuario'>
                         <div>
                             <input type=submit value=crear cuenta>
                         </div>
