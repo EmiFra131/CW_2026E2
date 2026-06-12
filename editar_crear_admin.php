@@ -49,15 +49,15 @@
                     <form action= admin_visual.php method= post>
                         <div>
                             <label for=correo>Cambiar el correo relacioado a esta cuenta?</label>
-                            <input id=correo name=correo type=text placeholder= required>
+                            <input id=correo name=correo type=text placeholder= >
                         </div>
                         <div>
                             <label for=usuario>Cambiar el nombre relacionado a esta cuenta?</label>
-                            <input id=usuario name=usuario type=text placeholder= required>
+                            <input id=usuario name=usuario type=text placeholder= >
                         </div>
                         <div>
                             <label for=grupo>Cambiar de grupo la cuenta asignada?</label>
-                            <select name=grupo id=grupo required>
+                            <select name=grupo id=grupo >
                                 <option value= disabled selected>Escoge el grupo en el que estas inscrito</option>
                                 <option value=61-A>61-A</option>
                                 <option value=61-B>61-B</option>
@@ -70,7 +70,7 @@
                         </div>
                         <div>
                             <label for=tipo_us>Cambiar el tipo de usuario de esta cuenta?</label>
-                            <select name=tipo_us id=tipo_us required>
+                            <select name=tipo_us id=tipo_us >
                                 <option value= disabled selected>Cual es tu rol en el ETE?</option>
                                 <option value=alumno>alumno</option>
                                 <option value=profesor>profesor</option>
@@ -79,7 +79,7 @@
                         </div>
                         <div>
                             <label for=password>Deseas cambiar la contraseña del usuario?:</label>
-                            <input id=password name=password type=password placeholder= required>
+                            <input id=password name=password type=password placeholder=>
                         </div>
                         <input type= hidden name= usuario_id value= '$usuario'>
                         <div>
