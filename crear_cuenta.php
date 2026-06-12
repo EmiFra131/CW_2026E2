@@ -57,7 +57,7 @@
                     $id_cuenta = $reslutado['id_cuenta'];
 
                     $cuenta_ciclo_nueva= "INSERT INTO ciclo_cuenta (id_ciclo_cuenta, id_cuenta, id_grupo, id_ciclo)
-                    VALUES (UUID(), '$id_cuenta', 1, 3)";
+                    VALUES (UUID(), '$id_cuenta','$grupo', 3)";
 
                     $query_ciclo = mysqli_query($con, $cuenta_ciclo_nueva);
 
