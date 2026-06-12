@@ -45,7 +45,27 @@
 
             $query = mysqli_query($con, $cuenta_nueva);
             if($query){
-                echo "La cuenta se creo con exito";
+
+                $obtener_id = "SELECT id_cuenta FROM cuenta WHERE correo = '$correo_s'";
+
+                $query_id = mysqli_query($con, $obtener_id);
+
+                if($query_id){
+
+                    $reslutado = mysqli_fetch_assoc($query_id);
+
+                    $id_cuenta = $reslutado['id_cuenta'];
+
+                    $cuenta_ciclo_nueva= "INSERT INTO ciclo_cuenta (id_ciclo_cuenta, id_cuenta, id_grupo, id_ciclo)
+                    VALUES (UUID(), '$id_cuenta', 1, 3)";
+
+                    $query_ciclo = mysqli_query($con, $cuenta_ciclo_nueva);
+
+                    echo "Cuentra creada con exito";
+
+                }
+
+                
                 //header("Location: index.php?registro=exitoso");
                 //exit();
             }
