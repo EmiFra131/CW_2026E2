@@ -14,7 +14,7 @@
 
         //grupo_valido($grupo);
         //usuario_valido($user);
-        if(!grupo_valido($grupo) || !usuario_valido($user)){    //verificacion de datos :p//
+        if(!grupo_valido($con, $grupo) || !usuario_valido($con, $user)){    //verificacion de datos :p//
             echo "Datos invalidos";
             exit();
         }
@@ -26,7 +26,7 @@
         $hash = hashear_password($contrasena);
 
         if($contrasena_valida == true && $correo_valido == true){
-            $id = null;
+            /*$id = null;
             if($user == "alumno")
                 $id = 1;
             if($user == "profesor")
@@ -36,8 +36,7 @@
 
             if($id == null){
                 echo "Rol invalido";
-                exit();
-            }
+                exit();*/
 
 
             
@@ -76,6 +75,10 @@
         }
     
     }
+    $obtener_t_usuarios = "SELECT id_tipo_usuario, rol FROM tipo_usuario";
+    $obtener_grupos = "SELECT id_grupo, nombre_grupo FROM grupo";
+    $grupos=mysqli_query($con, $obtener_grupos);
+    $tipos_usuario=mysqli_query($con, $obtener_t_usuarios);
 ?>
 
 
@@ -99,23 +102,19 @@
         <div>
             <label for="grupo">Grupo</label>
             <select name="grupo" id="grupo" required>
-                <option value="" disabled selected>Escoge el grupo en el que estas inscrito:</option>
-                <option value="61-A">61-A</option>
-                <option value="61-B">61-B</option>
-                <option value="61-c">61-C</option>
-                <option value="61-D">61-D</option>
-                <option value="62-A">62-A</option>
-                <option value="62-B">62-B</option>
-                <option value="62-c">62-C</option>
+                <option value="" disabled selected>Escoge el grupo en el que estás inscrito</option>
+                <?php while ($g = mysqli_fetch_assoc($grupos)): ?>
+                    <option value="<?= $g['id_grupo'] ?>"><?= htmlspecialchars($g['nombre_grupo']) ?></option>
+                <?php endwhile; ?>
             </select>
         </div>
         <div>
             <label for="tipo_us">Usuario:</label>
             <select name="tipo_us" id="tipo_us" required>
-                <option value="" disabled selected>¿Cuál es tu rol en el ETE?</option>
-                <option value="alumno">Alumno</option>
-                <option value="profesor">Profesor</option>
-                <option value="admin">Administrador</option>
+                <option value="" disabled selected>¿Cuál es tu rol en la ETE?</option>
+                <?php while ($tu = mysqli_fetch_assoc($tipos_usuario)): ?>
+                    <option value="<?= $tu['id_tipo_usuario'] ?>"><?= htmlspecialchars($tu['rol']) ?></option>
+                <?php endwhile; ?>
             </select>
         </div>
         <div>
