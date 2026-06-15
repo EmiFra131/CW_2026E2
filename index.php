@@ -12,22 +12,23 @@ if (isset($_POST["correo"])){
     $correo = trim($_POST["correo"]); // Quitamos espacios al inicio y al final del string recibido por formulario
     $contraseña = trim($_POST["password"]);
 
-    $query = "SELECT c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol FROM cuenta c 
+    $stmt = mysqli_prepare($con, "SELECT c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol FROM cuenta c 
     INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
-    WHERE c.correo = '$correo'"; 
-    
-    $result = mysqli_query( $con, $query);
-    $registro = mysqli_fetch_assoc($result);
+    WHERE c.correo = ?"); 
+    mysqli_stmt_bind_param($stmt, 's', $correo);
+    mysql_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $fila = mysqli_fetch_assoc($result);
     //echo $query;
     //var_dump($registro);         
 
-    if ($registro){
-        $hash_base_de_datos = $registro["contraseña"];
+    if ($fila){
+        $hash_base_de_datos = $fila["contraseña"];
         if(password_verify($contraseña, $hash_base_de_datos)){
-            $_SESSION['usuario'] = $registro["correo"];
-            $_SESSION["rol"] = $registro["rol"];
-            $_SESSION["nombre_completo"] = $registro["nombre"];
-            setcookie("usuario", $registro["correo"], time() + (86400)); // 1 dia = 86400 segundos, expirará en un dia
+            $_SESSION['usuario'] = $fila["correo"];
+            $_SESSION["rol"] = $fila["rol"];
+            $_SESSION["nombre_completo"] = $fila["nombre"];
+            setcookie("usuario", $fila["correo"], time() + (86400)); // 1 dia = 86400 segundos, expirará en un dia
         header("Location: usuario.php");
         exit();
         }
