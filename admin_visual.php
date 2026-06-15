@@ -1,6 +1,14 @@
 <?php
+    session_start();
     include 'include/db.php';
     include 'include/validacion.php';
+
+    /*
+    if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Admin") {
+        header("Location: index.php");
+        exit();
+    }
+    */
 
     $con = connect();
 
