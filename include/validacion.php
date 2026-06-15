@@ -1,33 +1,44 @@
 <?php
 
-
-function grupo_valido($grupo){  //Cambiar con una peticion sql para mantener los grpos actualizados con el servidor
-    // Opciones permitidas en el SELECT de Género
-    $grupos = ['61-A', '61-B', '61-C', '61-D', '62-A', '62-B', '62-C' ];
-
-    // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
+//validar que el grupo sea válido
+function grupo_valido($con, $grupo){
+    $obtener_grupos= "SELECT nombre_grupo FROM grupo";
+    $sql_grupos = mysqli_query($con, $obtener_grupos);
+    $grupos = [];
+    while($resultado = mysqli_fetch_assoc($sql_grupos))
+    {
+        $grupos[]=$resultado['nombre_grupo'];
+    }
     if (!in_array($grupo, $grupos) )
         return false;
 
     return true;
+
 }
-
-function usuario_valido($user){
-    // Opciones permitidas en el SELECT de Género
-    $usuarios = ['alumno','profesor','admin'];
-
-    // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
-    if (!in_array($user, $usuarios) )
+//validar que el tipo de usuario sea válido
+function usuario_valido($con, $tipo_usuario){
+    $obtener_tipos_usuario= "SELECT rol FROM tipo_usuario";
+    $sql_tipos_usuario = mysqli_query($con, $obtener_tipos_usuario);
+    $tipos_usuario = [];
+    while($resultado = mysqli_fetch_assoc($sql_tipos_usuario))
+    {
+        $tipos_usuario[]=$resultado['rol'];
+    }
+    if (!in_array($tipo_usuario, $tipos_usuario) )
         return false;
 
     return true;
 }
 
-function turno_valido($turno){
-    // Opciones permitidas en el SELECT de Género
-    $turnos = ['matutino', 'vespertino'];
-
-    // Si lo que mandaron NO está en nuestra lista secreta de PHP, regresamos falso
+//validar que el truno sea válido
+function turno_valido($con, $turno){
+    $obtener_turnos= "SELECT turno FROM turno";
+    $sql_turnos = mysqli_query($con, $obtener_turnos);
+    $turnos = [];
+    while($resultado = mysqli_fetch_assoc($sql_turnos))
+    {
+        $turnos[]=$resultado['turno'];
+    }
     if (!in_array($turno, $turnos) )
         return false;
 
@@ -77,7 +88,6 @@ function sanitizar_entrada($conexion, $datos) {
     return $datosLimpio;
 }
 
-
 function validar_correo($email){
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -95,7 +105,6 @@ function validar_numero($numero){
 
 }
 
-
 function hashear_password($pass){
 
     //Generamos el hash
@@ -110,6 +119,3 @@ function validar_password($pass_login, $hash_base_de_datos){
 }
 */
 ?>
-
-
-    

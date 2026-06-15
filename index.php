@@ -5,8 +5,6 @@ session_start();
 include './include/db.php';
 include './include/validacion.php';
 
-
-
 if (isset($_POST["correo"])){
 
     $con = connect();
@@ -21,9 +19,7 @@ if (isset($_POST["correo"])){
     $result = mysqli_query( $con, $query);
     $registro = mysqli_fetch_assoc($result);
     //echo $query;
-    //var_dump($registro);
-
-           
+    //var_dump($registro);         
 
     if ($registro){
         $hash_base_de_datos = $registro["contraseña"];
@@ -84,7 +80,7 @@ if (isset($_POST["correo"])){
             <input type="text" placeholder="correo" name = "correo" required>
             <span></span> <!--si el usuario ingresa mal los datos aquí le aparecerá el aviso-->
             <label>CONTRASEÑA:</label>
-            <input type="password" placeholder="contrasena" name = "password" required>
+            <input type="password" placeholder="contraseña" name = "password" required>
             <input type="submit" value="Iniciar sesión">
         </form>
     </main>
