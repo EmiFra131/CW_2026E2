@@ -96,9 +96,9 @@
             <input id="usuario" name="usuario" type="text" placeholder="" required>
         </div>
         <div>
-            <label for="grupo">grupo</label>
+            <label for="grupo">Grupo</label>
             <select name="grupo" id="grupo" required>
-                <option value="" disabled selected>Escoge el grupo en el que estas inscrito</option>
+                <option value="" disabled selected>Escoge el grupo en el que estas inscrito:</option>
                 <option value="61-A">61-A</option>
                 <option value="61-B">61-B</option>
                 <option value="61-c">61-C</option>
@@ -109,20 +109,20 @@
             </select>
         </div>
         <div>
-            <label for="tipo_us">usuario</label>
+            <label for="tipo_us">Usuario:</label>
             <select name="tipo_us" id="tipo_us" required>
-                <option value="" disabled selected>Cual es tu rol en el ETE?</option>
-                <option value="alumno">alumno</option>
-                <option value="profesor">profesor</option>
-                <option value="admin">administrador</option>
+                <option value="" disabled selected>¿Cuál es tu rol en el ETE?</option>
+                <option value="alumno">Alumno</option>
+                <option value="profesor">Profesor</option>
+                <option value="admin">Administrador</option>
             </select>
         </div>
         <div>
-            <label for="password">escoge una contraseña:</label>
+            <label for="password">Escoge una contraseña:</label>
             <input id="password" name="password" type="password" placeholder="" required>
         </div>
         <div>
-            <input type="submit" value="crear cuenta">
+            <input type="submit" value="Crear cuenta">
         </div>
     </form>
 </body>

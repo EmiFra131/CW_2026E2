@@ -93,8 +93,8 @@
                     echo '<div class="grupo">
                         <h3> Grupo'.$grupo.'</h3>
                         <form action="admin_visual.php" method="post">\
-                            <input type="hidden" name="grupo_act" value='.$grupo.'> 
-                            <button type="submit" class="boton"> ver interantes </button>
+                            <input type="hidden" name="grupo_act" value='.$grupo.'>
+                            <button type="submit" class="boton"> Ver integrantes </button>
                         </form>
                         <br>
                         <form action="admin_grupos.php" method="post">
@@ -114,9 +114,9 @@
                                 <div>
                                     <label for="turno">turno</label>
                                     <select name="turno" id="turno" required>
-                                        <option value="" disabled selected>Escoge el nuevo turno para el grupo</option>
-                                        <option value="matutino">matutino</option>
-                                        <option value="vespertino">vespertino</option>
+                                        <option value="" disabled selected>Escoge el nuevo turno para el grupo:</option>
+                                        <option value="Matutino">Matutino</option>
+                                        <option value="Vespertino">Vespertino</option>
                                     </select>
                                 </div>
                                 <div>
