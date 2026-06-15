@@ -2,12 +2,10 @@
 session_start();
 include './include/db.php';
 
-
-if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
+if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
-
 
 $con = connect();
 $id_grupo = $_GET["id"];
@@ -46,7 +44,7 @@ $result_alumnos = mysqli_query($con, $query_alumnos);
 </div>
 
 <div class="barra_azul">
-    PROFESOR > GRUPO <?php echo $grupo["nombre_grupo"]; ?>
+    PROFESOR > GRUPO <?php echo htmlspecialchars($grupo["nombre_grupo"]); ?>
 </div>
 
 <div class="menu_lateral">
@@ -69,10 +67,10 @@ $result_alumnos = mysqli_query($con, $query_alumnos);
         while ($alumno = mysqli_fetch_assoc($result_alumnos)) {
             echo "<tr class='fila_alumno'>";
             echo "<td class='col_icono'><div class='avatar'>👤</div></td>";
-            echo "<td>" . $alumno["nombre"] . "</td>";
-            echo "<td>" . $grupo["nombre_grupo"] . "</td>";
-            echo "<td>" . $alumno["correo"] . "</td>";
-            echo "<td><a href='alumno_tareas.php?id=" . $alumno["id_cuenta"] . "' class='enlace'>Ver más</a></td>";
+            echo "<td>" . htmlspecialchars($alumno["nombre"]) . "</td>";
+            echo "<td>" . htmlspecialchars($grupo["nombre_grupo"]) . "</td>";
+            echo "<td>" . htmlspecialchars($alumno["correo"]) . "</td>";
+            echo "<td><a href='alumno_tareas.php?id=" . htmlspecialchars($alumno["id_cuenta"]) . "' class='enlace'>Ver más</a></td>";
             echo "</tr>";
         }
         ?>

@@ -2,8 +2,7 @@
 session_start();
 include './include/db.php';
 
-
-if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
+if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
@@ -59,10 +58,10 @@ $result = mysqli_query($con, $query);
         while ($grupo = mysqli_fetch_assoc($result)) {
             echo "<tr class='fila_alumno'>";
             echo "<td class='col_icono'><div class='avatar'>👤</div></td>";
-            echo "<td>" . $grupo["nombre_grupo"] . "</td>";
-            echo "<td>" . $grupo["turno"] . "</td>";
-            echo "<td>" . $grupo["periodo"] . "</td>";
-            echo "<td><a href='vista_grupo.php?id=" . $grupo["id_grupo"] . "' class='enlace'>Ver más</a></td>";
+            echo "<td>" . htmlspecialchars($grupo["nombre_grupo"]) . "</td>";
+            echo "<td>" . htmlspecialchars($grupo["turno"]) . "</td>";
+            echo "<td>" . htmlspecialchars($grupo["periodo"]) . "</td>";
+            echo "<td><a href='vista_grupo.php?id=" . htmlspecialchars($grupo["id_grupo"]) . "' class='enlace'>Ver más</a></td>";
             echo "</tr>";
         }
         ?>
