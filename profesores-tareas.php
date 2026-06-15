@@ -3,7 +3,8 @@ session_start();
 include './include/db.php';
 include './include/validacion.php';
 
-if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] != "Profesor") {
+
+if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
@@ -13,29 +14,42 @@ $error = null;
 $exito = null;
 
 // Traer grupos para el select
-$query_grupos = "SELECT id_grupo, nombre_grupo FROM grupo";
-$result_grupos = mysqli_query($con, $query_grupos);
+$stmt_grupos = mysqli_prepare($con, "SELECT id_grupo, nombre_grupo FROM grupo");
+mysqli_stmt_execute($stmt_grupos);
+$result_grupos = mysqli_stmt_get_result($stmt_grupos);
+mysqli_stmt_close($stmt_grupos);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre      = sanitizar_entrada($con, $_POST["tarea"]);
-    $descripcion = sanitizar_entrada($con, $_POST["descripcion"]);
+    $nombre      = $_POST["tarea"];
+    $descripcion = $_POST["descripcion"];
     $id_profesor = $_SESSION["id_cuenta"];
     $id_grupo    = $_POST["grupo"];
     $fecha       = $_POST["fecha"];
 
-    $query = "INSERT INTO actividad (id_actividad, nombre, descripcion, id_cuenta_profesor, id_tipo_tarea)
-              VALUES (UUID(), '$nombre', '$descripcion', '$id_profesor', 1)";
-    $result = mysqli_query($con, $query);
+    // INSERT actividad
+    $stmt = mysqli_prepare($con,
+        "INSERT INTO actividad (id_actividad, nombre, descripcion, id_cuenta_profesor, id_tipo_tarea)
+         VALUES (UUID(), ?, ?, ?, 1)"
+    );
+    mysqli_stmt_bind_param($stmt, "ssi", $nombre, $descripcion, $id_profesor);
+    $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-        $id_actividad = mysqli_insert_id($con);
+        $id_actividad = mysqli_stmt_insert_id($stmt);
+        mysqli_stmt_close($stmt);
 
-        $query_grupo = "INSERT INTO actividad_grupo (id_actividad_grupo, id_actividad, id_grupo, id_ciclo, fecha_de_entrega)
-                        VALUES (UUID(), '$id_actividad', '$id_grupo', 4, '$fecha')";
-        mysqli_query($con, $query_grupo);
+        // INSERT actividad_grupo
+        $stmt_grupo = mysqli_prepare($con,
+            "INSERT INTO actividad_grupo (id_actividad_grupo, id_actividad, id_grupo, id_ciclo, fecha_de_entrega)
+             VALUES (UUID(), ?, ?, 4, ?)"
+        );
+        mysqli_stmt_bind_param($stmt_grupo, "iis", $id_actividad, $id_grupo, $fecha);
+        mysqli_stmt_execute($stmt_grupo);
+        mysqli_stmt_close($stmt_grupo);
 
         $exito = "Tarea publicada con éxito";
     } else {
+        mysqli_stmt_close($stmt);
         $error = "Error al publicar la tarea";
     }
 }
@@ -65,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <img src="./statics/img/iconos/tarea.png" alt="tarea">
     <h2>TAREA:</h2>
 
-    <?php if ($exito) echo "<p style='color:green'>" . htmlspecialchars($exito) . "</p>"; ?>
-    <?php if ($error) echo "<p style='color:red'>" . htmlspecialchars($error) . "</p>"; ?>
+    <?php if ($exito) echo "<p style='color:green'>$exito</p>"; ?>
+    <?php if ($error) echo "<p style='color:red'>$error</p>"; ?>
 
     <form method="post" action="profesores-tareas.php" enctype="multipart/form-data">
 
@@ -85,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="" disabled selected>Selecciona un grupo</option>
             <?php
             while ($grupo = mysqli_fetch_assoc($result_grupos)) {
-                echo "<option value='" . htmlspecialchars($grupo["id_grupo"]) . "'>" . htmlspecialchars($grupo["nombre_grupo"]) . "</option>";
+                echo "<option value='" . $grupo["id_grupo"] . "'>" . $grupo["nombre_grupo"] . "</option>";
             }
             ?>
         </select>
