@@ -2,6 +2,13 @@
     include 'include/db.php';
     include 'include/validacion.php';
 
+    /*
+    if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Admin") {
+        header("Location: index.php");
+        exit();
+    }
+    */
+
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(isset($_POST["crear"]))
             $editar = false;
