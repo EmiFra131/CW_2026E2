@@ -38,7 +38,7 @@
 
         <header>
             <?php
-                echo "<h1>Administrador > Grupo $grupo</h1>";
+                echo "<h1>Administrador Grupo " . htmlspecialchars($grupo) . "</h1>";
             ?>
         </header>
 

@@ -221,7 +221,7 @@
                 if($resultado != null){
                     echo 
                     "<img src='../static/img/icono_usuario.png' alt= 'usuario'>
-                    <h2>".$nombre_profe."</h2>
+                    <h2>" . htmlspecialchars($nombre_profe) . "</h2>
                     <p>Horario: Lunes-Viernes 12:00 a 13:40</p>
                     <p>Salón: LACEC</p>";
                 }
@@ -239,13 +239,13 @@
                         }
                     }
                     if($editar){
-                       foreach($alumnos as $alumno){
+                        foreach($alumnos as $alumno){
                             echo "<div class=fila_alumno>
-                                <span>".$alumno['id_ciclo_cuenta']."</span>
-                                <span>".$alumno['nombre']."</span>
+                                <span>" . htmlspecialchars($alumno["id_ciclo_cuenta"]) ."</span>
+                                <span>" . htmlspecialchars($alumno["nombre"]) . "</span>
                                 <form action='editar_crear_admin.php' method='post'>
-                                    <input type= hidden name= us_editar value= ".$alumno['id_ciclo_cuenta'].">
-                                    <button type= submit >➕ editar</button>
+                                    <input type= hidden name= us_editar value= ". htmlspecialchars($alumno["id_ciclo_cuenta"]) .">
+                                    <button type= submit >➕ Editar</button>
                                 </form>
                             </div>";
                         } 
@@ -254,7 +254,7 @@
                 <div class="boton_agregar">
                     <?php
                         if($seleccion){
-                           echo "<form action='editar_crear_admin.php' method='post'>
+                            echo "<form action='editar_crear_admin.php' method='post'>
                                 <input type= hidden name= crear>
                                 <button type= submit >➕ Crear cuenta</button>
                             </form>";

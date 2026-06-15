@@ -1,4 +1,4 @@
- <?php
+<?php
 
     include 'include/db.php';
     include 'include/validacion.php';
@@ -65,7 +65,7 @@
     else{
         echo "NADA";
     }
- ?>
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -91,14 +91,14 @@
 
                 if(!$edit){
                     echo '<div class="grupo">
-                        <h3> Grupo'.$grupo.'</h3>
-                        <form action="admin_visual.php" method="post">\
-                            <input type="hidden" name="grupo_act" value='.$grupo.'>
+                        <h3> Grupo' . htmlspecialchars($grupo) . '</h3>
+                        <form action="admin_visual.php" method="post">
+                            <input type="hidden" name="grupo_act" value=' . htmlspecialchars($grupo) . '>
                             <button type="submit" class="boton"> Ver integrantes </button>
                         </form>
                         <br>
                         <form action="admin_grupos.php" method="post">
-                            <input type="hidden" name="grupo_act" value='.$grupo.'> 
+                            <input type="hidden" name="grupo_act" value=' . htmlspecialchars($grupo) . '> 
                             <button type="submit" class="boton"> Editar </button>
                         </form>
                     </div>';
@@ -109,7 +109,7 @@
                             <form action="admin_grupos.php" method="post">
                                 <div>
                                     <label for="nombre">Cambiar el nombre del grupo:</label>
-                                    <input id="nombre" name="nombre" type="text" placeholder='.$grupo.' required>
+                                    <input id="nombre" name="nombre" type="text" placeholder="' . htmlspecialchars($grupo) . '">s
                                 </div>
                                 <div>
                                     <label for="turno">turno</label>
@@ -120,13 +120,12 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <input id="grupo_ant" name="grupo_ant" type="hidden" value='.$grupo.'>
+                                    <input id="grupo_ant" name="grupo_ant" type="hidden" value="' . htmlspecialchars($grupo) . '">
                                 </div>
                                 <button type="submit" class="boton">Guardar</button>
                             </form>
                         </div>';
                     }
-                     
                 }
             }
             
