@@ -200,11 +200,11 @@
     <body>
         <nav>
             <div class="logos_izquierda">
-                <img src="../static/img/logo_unam.png" alt="UNAM">
-                <img src="../static/img/logo_p6.png" alt="ENP6">
+                <img src="../statics/img/logos/logo_unam.png" alt="UNAM">
+                <img src="../statics/img/logos/logo_p6.png" alt="ENP6">
             </div>
             <div class="logo_derecha">
-                <img src="../static/img/logo_ete.png" alt="ETE">
+                <img src="../statics/img/logos/logo_ete.png" alt="ETE">
             </div>
         </nav>
 
@@ -220,7 +220,7 @@
                 <?php
                 if($resultado != null){
                     echo 
-                    "<img src='../static/img/icono_usuario.png' alt= 'usuario'>
+                    "<img src='../statics/img/iconos/icono_usuario.png' alt= 'usuario'>
                     <h2>" . htmlspecialchars($nombre_profe) . "</h2>
                     <p>Horario: Lunes-Viernes 12:00 a 13:40</p>
                     <p>Salón: LACEC</p>";

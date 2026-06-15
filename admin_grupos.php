@@ -77,9 +77,9 @@
 </head>
 <body>
     <nav>
-        <img src="../statics/img/unam.png" alt="Universidad Nacional Autonoma De Mexico" id="unam">
-        <img src="../statics/img/enp.svg" alt="Escuela Nacional Preparatoria 6">
-        <img src="../statics/img/ete.png" alt="Estudios Tecnicos Especializados" id="ete">
+        <img src="../statics/img/logos/unam.png" alt="Universidad Nacional Autonoma De Mexico" id="unam">
+        <img src="../statics/img/logos/enp.svg" alt="Escuela Nacional Preparatoria 6">
+        <img src="../statics/img/logos/ete.png" alt="Estudios Tecnicos Especializados" id="ete">
     </nav>
     <div id="user">
         <p><strong>Administrador</strong></p>

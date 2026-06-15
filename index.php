@@ -81,17 +81,17 @@ if (isset($_POST["correo"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./statics/styles/index.css">
+    <link rel="stylesheet" href="statics/styles/index.css">
 </head>
 <body>
     <header>
-        <img src="./statics/img/logo_unam.svg" alt="Logo de la UNAM" class="logo" id="logo_unam">
-        <img src="./statics/img/logo_p6.png" alt="Logo de la ENP 6"  class="logo" id="logo_p6">
-        <img src="./statics/img/logo_ete.png" alt="Logo de los ETE" class="logo" id="logo_ete">
+        <img src="statics/img/logos/unam.jpg" class="logo" id="logo_unam">
+        <img src="statics/img/logos/logo_p6.png" class="logo" id="logo_p6">
+        <img src="statics/img/logos/ete.png" class="logo" id="logo_ete">
     </header>
     <main id="contenedor_inicio">
         <h1>INICIAR SESIÓN</h1>
-        <img src="./statics/img/usuario.png" alt="Icono de perfil de usuario" id="icono_perfil">
+        <img src="./statics/img/iconos/usuario.png" alt="Icono de perfil de usuario" id="icono_perfil">
         <form id="formulario_inicio" method="post" action="index.php">
             <label>USUARIO:</label>
             <input type="text" placeholder="correo" name = "correo" required>
