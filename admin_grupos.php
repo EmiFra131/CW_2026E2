@@ -33,10 +33,13 @@
                 else
                     $idt = 2;
 
-                $editar_grupo = "UPDATE grupo SET nombre_grupo = '$nombre_s', id_turno = $idt  
-                WHERE nombre_grupo = '$anterior'";
-
-                $query = mysqli_query($con, $editar_grupo);
+                $stmt_editar_grupo = mysqli_prepare($con, "UPDATE grupo SET id_grupo = '$nombre_s', id_turno = $idt  
+                WHERE nombre_grupo = ?");
+                mysqli_stmt_bind_param($stmt, 's', $anterior);
+                mysql_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                $fila = mysqli_fetch_assoc($result)
+                $query = mysqli_query($con, $anterior);
 
                 if($query){
                     $edit = false;
