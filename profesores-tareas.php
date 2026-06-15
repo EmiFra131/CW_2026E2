@@ -68,8 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <img src="./statics/img/iconos/tarea.png" alt="tarea">
     <h2>TAREA:</h2>
 
-    <?php if ($exito) echo "<p style='color:green'>$exito</p>"; ?>
-    <?php if ($error) echo "<p style='color:red'>$error</p>"; ?>
+    <?php if ($exito) echo "<p style='color:green'>" . htmlspecialchars($exito) . "</p>"; ?>
+    <?php if ($error) echo "<p style='color:red'>" . htmlspecialchars($error) . "</p>"; ?>
 
     <form method="post" action="profesores-tareas.php" enctype="multipart/form-data">
 
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="" disabled selected>Selecciona un grupo</option>
             <?php
             while ($grupo = mysqli_fetch_assoc($result_grupos)) {
-                echo "<option value='" . $grupo["id_grupo"] . "'>" . $grupo["nombre_grupo"] . "</option>";
+                echo "<option value='" . htmlspecialchars($grupo["id_grupo"]) . "'>" . htmlspecialchars($grupo["nombre_grupo"]) . "</option>";
             }
             ?>
         </select>
