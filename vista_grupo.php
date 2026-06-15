@@ -10,19 +10,28 @@ if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] != "Profesor") {
 $con = connect();
 $id_grupo = $_GET["id"];
 
-$query_grupo = "SELECT g.nombre_grupo, t.turno
-                FROM grupo g
-                INNER JOIN turno t ON g.id_turno = t.id_turno
-                WHERE g.id_grupo = $id_grupo";
-$result_grupo = mysqli_query($con, $query_grupo);
+$stmt_grupo = mysqli_prepare($con,
+    "SELECT g.nombre_grupo, t.turno
+     FROM grupo g
+     INNER JOIN turno t ON g.id_turno = t.id_turno
+     WHERE g.id_grupo = ?"
+);
+mysqli_stmt_bind_param($stmt_grupo, 'i', $id_grupo);
+mysqli_stmt_execute($stmt_grupo);
+$result_grupo = mysqli_stmt_get_result($stmt_grupo);
 $grupo = mysqli_fetch_assoc($result_grupo);
 
-$query_alumnos = "SELECT c.id_cuenta, c.nombre, c.correo
-                  FROM ciclo_cuenta cc
-                  INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
-                  INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
-                  WHERE cc.id_grupo = $id_grupo AND t.rol = 'Alumno'";
-$result_alumnos = mysqli_query($con, $query_alumnos);
+
+$stmt_alumnos = mysqli_prepare($con,
+    "SELECT c.id_cuenta, c.nombre, c.correo
+     FROM ciclo_cuenta cc
+     INNER JOIN cuenta c ON cc.id_cuenta = c.id_cuenta
+     INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
+     WHERE cc.id_grupo = ? AND t.rol = 'Alumno'"
+);
+mysqli_stmt_bind_param($stmt_alumnos, 'i', $id_grupo);
+mysqli_stmt_execute($stmt_alumnos);
+$result_alumnos = mysqli_stmt_get_result($stmt_alumnos);
 ?>
 <!DOCTYPE html>
 <html lang="es">
