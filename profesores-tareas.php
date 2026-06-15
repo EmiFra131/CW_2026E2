@@ -3,8 +3,7 @@ session_start();
 include './include/db.php';
 include './include/validacion.php';
 
-
-if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
+if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
@@ -29,10 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($con, $query);
 
     if ($result) {
-        // Obtener el id de la actividad recién creada
         $id_actividad = mysqli_insert_id($con);
-        
-        // Asignarla al grupo
+
         $query_grupo = "INSERT INTO actividad_grupo (id_actividad_grupo, id_actividad, id_grupo, id_ciclo, fecha_de_entrega)
                         VALUES (UUID(), '$id_actividad', '$id_grupo', 4, '$fecha')";
         mysqli_query($con, $query_grupo);
@@ -68,8 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <img src="./statics/img/iconos/tarea.png" alt="tarea">
     <h2>TAREA:</h2>
 
-    <?php if ($exito) echo "<p style='color:green'>$exito</p>"; ?>
-    <?php if ($error) echo "<p style='color:red'>$error</p>"; ?>
+    <?php if ($exito) echo "<p style='color:green'>" . htmlspecialchars($exito) . "</p>"; ?>
+    <?php if ($error) echo "<p style='color:red'>" . htmlspecialchars($error) . "</p>"; ?>
 
     <form method="post" action="profesores-tareas.php" enctype="multipart/form-data">
 
@@ -88,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="" disabled selected>Selecciona un grupo</option>
             <?php
             while ($grupo = mysqli_fetch_assoc($result_grupos)) {
-                echo "<option value='" . $grupo["id_grupo"] . "'>" . $grupo["nombre_grupo"] . "</option>";
+                echo "<option value='" . htmlspecialchars($grupo["id_grupo"]) . "'>" . htmlspecialchars($grupo["nombre_grupo"]) . "</option>";
             }
             ?>
         </select>
