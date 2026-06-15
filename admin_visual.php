@@ -43,14 +43,18 @@
 
             $user = $_POST["usuario_id"];
 
-            $query_edit = "SELECT cc.id_ciclo_cuenta, c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol, g.nombre_grupo
+            $stmt_edit = mysqli_prepare($con, "SELECT cc.id_ciclo_cuenta, c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol, g.nombre_grupo
             FROM ciclo_cuenta cc
             INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
             INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
             INNER JOIN grupo         g  ON cc.id_grupo = g.id_grupo
-            WHERE cc.id_ciclo_cuenta = '$user'";
+            WHERE cc.id_ciclo_cuenta = ?");
+            mysqli_stmt_bind_param($stmt, 's', $user);
+            mysql_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $fila = mysqli_fetch_assoc($result);
 
-            $consulta_edit = mysqli_query($con,$query_edit);
+            $consulta_edit = mysqli_query($con,$stmt_edit);
 
             $coincidencia = mysqli_fetch_assoc($consulta_edit);
 
@@ -116,7 +120,7 @@
                     exit();
                 }
 
-                if($_POST['coorreo'] == null || $_POST['usuario'] == null|| $_POST['grupo'] == null || $_POST['tipo_us'] == null || $_POST["password"]== null){
+                if($_POST['correo'] == null || $_POST['usuario'] == null|| $_POST['grupo'] == null || $_POST['tipo_us'] == null || $_POST["password"]== null){
 
                     $act_datos = "UPDATE cuenta
                     SET correo = '$correo_s', nombre = '$nombre_edit_s, contraseña = $hash, id_tipo_usuario = $id_us'
@@ -140,16 +144,19 @@
 
     }
 
-    $alumnos_query = 
-    "SELECT cc.id_ciclo_cuenta, c.nombre, t.rol, g.nombre_grupo, ce.periodo
+    $stmt_alumnos = mysqli_prepare($con, "SELECT cc.id_ciclo_cuenta, c.nombre, t.rol, g.nombre_grupo, ce.periodo
     FROM ciclo_cuenta cc
     INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
     INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
     INNER JOIN grupo         g  ON cc.id_grupo = g.id_grupo
     INNER JOIN ciclo_escolar ce ON cc.id_ciclo = ce.id_ciclo
-    WHERE g.nombre_grupo = '$grupo' AND t.rol = 'alumno'";
-    
-    $query_al = mysqli_query($con, $alumnos_query);
+    WHERE g.id_grupo = ? AND t.rol = 'alumno'");
+    mysqli_stmt_bind_param($stmt, 's', $grupo);
+    mysql_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $fila = mysqli_fetch_assoc($result);
+
+    $query_al = mysqli_query($con, $stmt_alumnos);
 
     if($query_al){
         $id = [];
@@ -173,14 +180,17 @@
         }
     }
 
-    $profesor_query = 
-    "SELECT cc.id_ciclo_cuenta, c.nombre, t.rol, g.nombre_grupo, g.id_turno, ce.periodo
+    $stmt_profesor = mysqli_prepare($con, "SELECT cc.id_ciclo_cuenta, c.nombre, t.rol, g.nombre_grupo, g.id_turno, ce.periodo
     FROM ciclo_cuenta cc
     INNER JOIN cuenta        c  ON cc.id_cuenta = c.id_cuenta
     INNER JOIN tipo_usuario  t  ON c.id_tipo_usuario = t.id_tipo_usuario
     INNER JOIN grupo         g  ON cc.id_grupo = g.id_grupo
     INNER JOIN ciclo_escolar ce ON cc.id_ciclo = ce.id_ciclo
-    WHERE g.nombre_grupo = '$grupo' AND t.rol = 'profesor'";
+    WHERE g.id_grupo = ? AND t.rol = 'profesor'");
+    mysqli_stmt_bind_param($stmt, 's', $grupo);
+    mysql_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $fila = mysqli_fetch_assoc($result);
 
     $query_prof = mysqli_query($con, $profesor_query);
 
