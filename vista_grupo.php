@@ -2,12 +2,12 @@
 session_start();
 include './include/db.php';
 
-/*
+
 if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
-*/
+
 
 $con = connect();
 $id_grupo = $_GET["id"];

@@ -3,12 +3,12 @@ session_start();
 include './include/db.php';
 include './include/validacion.php';
 
-/*
+
 if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Profesor") {
     header("Location: index.php");
     exit();
 }
-*/
+
 $con = connect();
 $error = null;
 $exito = null;
@@ -20,7 +20,7 @@ $result_grupos = mysqli_query($con, $query_grupos);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre      = sanitizar_entrada($con, $_POST["tarea"]);
     $descripcion = sanitizar_entrada($con, $_POST["descripcion"]);
-    $id_profesor = $_SESSION["usuario"];
+    $id_profesor = $_SESSION["id_cuenta"];
     $id_grupo    = $_POST["grupo"];
     $fecha       = $_POST["fecha"];
 
