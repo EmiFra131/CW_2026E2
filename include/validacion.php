@@ -1,48 +1,26 @@
 <?php
 
-//validar que el grupo sea válido
-function grupo_valido($con, $grupo){
-    $obtener_grupos= "SELECT nombre_grupo FROM grupo";
-    $sql_grupos = mysqli_query($con, $obtener_grupos);
-    $grupos = [];
-    while($resultado = mysqli_fetch_assoc($sql_grupos))
-    {
-        $grupos[]=$resultado['nombre_grupo'];
-    }
-    if (!in_array($grupo, $grupos) )
-        return false;
-
-    return true;
-
-}
-//validar que el tipo de usuario sea válido
-function usuario_valido($con, $tipo_usuario){
-    $obtener_tipos_usuario= "SELECT rol FROM tipo_usuario";
-    $sql_tipos_usuario = mysqli_query($con, $obtener_tipos_usuario);
-    $tipos_usuario = [];
-    while($resultado = mysqli_fetch_assoc($sql_tipos_usuario))
-    {
-        $tipos_usuario[]=$resultado['rol'];
-    }
-    if (!in_array($tipo_usuario, $tipos_usuario) )
-        return false;
-
-    return true;
+function grupo_valido($con, $id_grupo){
+    $stmt = mysqli_prepare($con, "SELECT 1 FROM grupo WHERE id_grupo = ?");
+    mysqli_stmt_bind_param($stmt, 'i', $id_grupo);
+    mysqli_stmt_execute($stmt);
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 }
 
-//validar que el truno sea válido
-function turno_valido($con, $turno){
-    $obtener_turnos= "SELECT turno FROM turno";
-    $sql_turnos = mysqli_query($con, $obtener_turnos);
-    $turnos = [];
-    while($resultado = mysqli_fetch_assoc($sql_turnos))
-    {
-        $turnos[]=$resultado['turno'];
-    }
-    if (!in_array($turno, $turnos) )
-        return false;
+function usuario_valido($con, $id_tipo_usuario){
+    $id = (int) $id_tipo_usuario;
+    $stmt = mysqli_prepare($con, "SELECT 1 FROM tipo_usuario WHERE id_tipo_usuario = ?");
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+}
 
-    return true;
+function turno_valido($con, $id_turno){
+    $id_turno = (int) $id_turno;
+    $stmt = mysqli_prepare($con, "SELECT 1 FROM turno WHERE id_turno = ?");
+    mysqli_stmt_bind_param($stmt, 'i', $id_turno);
+    mysqli_stmt_execute($stmt);
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 }
 
 
@@ -63,52 +41,63 @@ function validacion_contrasena($pass) {
 
 
 
-function sanitizar_entrada($conexion, $datos) {
-
-    // Quitamos espacios en blanco vacíos al inicio y al final
+// $max: límite de caracteres (50 para campos cortos como nombre, 1000 para descripciones).
+function sanitizar_entrada($conexion, $datos, $max = 50) {
     $datos = trim($datos);
-
-    // Si meten "--", lo cambiamos por "".
-    $datos = str_replace('--', '', $datos);
-
-    // Si meten "/*", lo cambiamos por "".
-    $datos = str_replace('/*', '', $datos);
-    
-    // Si meten "*/", lo cambiamos por "".
-    $datos = str_replace('*/', '', $datos);
-
-    // Límite de tamaño (Protección contra textos gigantes)
-    // Corta el texto a un máximo de 50 caracteres para no saturar la BD
-    $datos = substr($datos, 0, 50);
-
-    // Busca comillas simples (') o dobles (") y les pone una diagonal inversa (\) antes.
-    // Así la base de datos sabe que es parte del nombre y NO un comando SQL.
-    $datosLimpio = mysqli_real_escape_string($conexion, $datos);
-    
-    return $datosLimpio;
+    $datos = str_replace(['--', '/*', '*/'], '', $datos);
+    $datos = substr($datos, 0, $max);
+    return mysqli_real_escape_string($conexion, $datos);
 }
 
 function validar_correo($email){
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL)){
         return true;
-    }  
+    }
     else{
         return false;
-    }       
+    }
+}
+
+// Cada rol tiene un formato y dominio de correo institucional distinto:
+// Alumno:    número de cuenta@alumno.enp.unam.mx  (ej. 321056900@alumno.enp.unam.mx)
+// Profesor / Administrador: nombre.apellido@enp.unam.mx (ej. carlos.campos@enp.unam.mx)
+function validar_correo_rol($correo, $id_tipo_usuario){
+    if (!validar_correo($correo)) return false;
+    if ((int)$id_tipo_usuario == ROL_ALUMNO)
+        return (bool) preg_match('/^[0-9]+@alumno\.enp\.unam\.mx$/', $correo);
+    return (bool) preg_match('/^[a-zA-Z]+(\.[a-zA-Z]+)+@enp\.unam\.mx$/', $correo);
 }
 
 function validar_numero($numero){
+    return filter_var($numero, FILTER_VALIDATE_INT) !== false;
+}
 
-    if(filter_var($numero, FILTER_SANITIZE_NUMBER_INT))
-        echo "La edad '$numero' es válida.\n"; 
+// Valida que un entero esté dentro del rango [min, max] inclusive.
+function validar_rango($valor, $min, $max){
+    $valor = (int) $valor;
+    return $valor >= $min && $valor <= $max;
+}
 
+// Valida que un string de fecha sea un datetime-local válido (YYYY-MM-DDTHH:MM).
+function validar_fecha($fecha){
+    if (empty($fecha)) return false;
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $fecha)) return false;
+    [$fecha_parte, $hora_parte] = explode('T', $fecha);
+    [$anio, $mes, $dia]         = explode('-', $fecha_parte);
+    [$hora, $minuto]            = explode(':', $hora_parte);
+    return checkdate((int)$mes, (int)$dia, (int)$anio)
+        && (int)$hora >= 0 && (int)$hora <= 23
+        && (int)$minuto >= 0 && (int)$minuto <= 59;
 }
 
 function hashear_password($pass){
 
     //Generamos el hash
-    $password_hasheada = password_hash($pass, PASSWORD_DEFAULT);
+    //
+    //
+    //
+    //    $password_hasheada = password_hash($pass, PASSWORD_DEFAULT);
 
     return $password_hasheada;
 }

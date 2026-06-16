@@ -1,0 +1,125 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #222;
+    background: #fff;
+}
+
+a {
+    color: #000;
+}
+
+nav, header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+nav img {
+    height: 36px;
+}
+
+nav a {
+    margin-right: 12px;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+}
+
+h1, h2 {
+    margin-bottom: 10px;
+}
+
+.error {
+    color: #b00020;
+}
+
+.exito {
+    color: #1a7d36;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.badge {
+    font-weight: bold;
+}
+
+progress {
+    width: 120px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 320px;
+    margin: 20px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+td form {
+    display: inline;
+    margin: 0;
+    max-width: none;
+}
+
+label {
+    font-size: 13px;
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px;
+    border: 1px solid #999;
+}
+
+button, input[type="submit"], .boton {
+    cursor: pointer;
+    background: #eee;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#contenedor_inicio {
+    width: 300px;
+    margin: 60px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+#icono_perfil {
+    width: 80px;
+    height: 80px;
+}
