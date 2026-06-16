@@ -17,19 +17,16 @@ if (isset($_POST["correo"])){
     WHERE c.correo = ?"); 
     mysqli_stmt_bind_param($stmt, 's', $correo);
     mysql_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $fila = mysqli_fetch_assoc($result);
-    //echo $query;
-    //var_dump($registro);         
+    $result = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt););
 
-    if ($fila){
-        $hash_base_de_datos = $fila["contraseña"];
+    if ($result){
+        $hash_base_de_datos = $result["contraseña"];
         if(password_verify($contraseña, $hash_base_de_datos)){
-            $_SESSION['usuario'] = $fila["correo"];
-            $_SESSION["rol"] = $fila["rol"];
-            $_SESSION["nombre_completo"] = $fila["nombre"];
-            setcookie("usuario", $fila["correo"], time() + (86400)); // 1 dia = 86400 segundos, expirará en un dia
-        header("Location: usuario.php");
+            $_SESSION['id'] = $result["id_cuenta"];
+            $_SESSION["nombre"] = $result["nombre"];
+            $_SESSION["rol"] = $result["rol"];
+            $_SESSION["correo"] = $result["correo"];
+            set_cookie("usuario", $result["correo"], time()+(86400));
         exit();
         }
     } else {
@@ -37,42 +34,11 @@ if (isset($_POST["correo"])){
     }
 
 } else {
-    // Verificamos que tenga la cookie
-    if (isset($_COOKIE["usuario"])){
-        $con = connect();
-        $usuario = $_COOKIE["usuario"];
-
-        $query = "SELECT c.id_cuenta, c.correo, c.nombre, c.contraseña, t.rol FROM cuenta c 
-        INNER JOIN tipo_usuario t ON c.id_tipo_usuario = t.id_tipo_usuario
-        WHERE c.correo = '$usuario'"; 
-        $result = mysqli_query( $con, $query);
-        $registro = mysqli_fetch_assoc($result);
-
-        if ($registro){
-    $hash_base_de_datos = $registro["contraseña"];
-    if(password_verify($contraseña, $hash_base_de_datos)){
-        $_SESSION['usuario'] = $registro["id_cuenta"]; 
-        $_SESSION["rol"] = $registro["rol"];
-        $_SESSION["nombre"] = $registro["nombre"];
-        setcookie("usuario", $registro["correo"], time() + (86400));
-
-        // Redirigir según el rol
-        if ($registro["rol"] == "Profesor") {
-            header("Location: profesores-vista.php");
-            exit();
-        }
-    }
+    
+        $error = "No coincide el formulario"
 }
         
-        
-        /*$_SESSION['usuario'] = $registro["correo"];
-        $_SESSION["rol"] = $registro["rol"];
-        $_SESSION["nombre_completo"] = $registro["nombre"];
-        setcookie("usuario", $registro["correo"], time() + (86400)); // 1 dia = 86400 segundos, expirará en un dia
-        header("Location: templates/alumno_tareas.html");
-*/
-    }
-}
+    
 
 ?>
 
@@ -81,7 +47,7 @@ if (isset($_POST["correo"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Iniciar sesión | SATEC</title>
     <link rel="stylesheet" href="statics/styles/index.css">
 </head>
 <body>
@@ -93,18 +59,21 @@ if (isset($_POST["correo"])){
     <main id="contenedor_inicio">
         <h1>INICIAR SESIÓN</h1>
         <img src="./statics/img/iconos/usuario.png" alt="Icono de perfil de usuario" id="icono_perfil">
+        <?php if(!empty($error)):?>
+            <p class="error"><?= htmlspecialchars($error)?></p>
+        <?php endif;?>
         <form id="formulario_inicio" method="post" action="index.php">
-            <label>USUARIO:</label>
-            <input type="text" placeholder="correo" name = "correo" required>
+            <label for="correo">Correo:</label>
+            <input type="text"  name = "correo" id="correo" required>
             <span></span> <!--si el usuario ingresa mal los datos aquí le aparecerá el aviso-->
-            <label>CONTRASEÑA:</label>
-            <input type="password" placeholder="contraseña" name = "password" required>
+            <label for="contraseña">CONTRASEÑA:</label>
+            <input type="password" placeholder="********" name = "contraseña" id="contraseña" required>
             <input type="submit" value="Iniciar sesión">
         </form>
     </main>
     <footer>
         <p>Si no tienes una cuenta,
-            <form action="crear_cuenta.php">
+            <form action="control/cuentas/crear.php">
                 <button type="submit"> crea una </button>
             </form>
         </p>
