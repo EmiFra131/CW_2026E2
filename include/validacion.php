@@ -1,48 +1,33 @@
 <?php
 
 //validar que el grupo sea válido
-function grupo_valido($con, $grupo){
-    $obtener_grupos= "SELECT nombre_grupo FROM grupo";
-    $sql_grupos = mysqli_query($con, $obtener_grupos);
-    $grupos = [];
-    while($resultado = mysqli_fetch_assoc($sql_grupos))
-    {
-        $grupos[]=$resultado['nombre_grupo'];
-    }
-    if (!in_array($grupo, $grupos) )
-        return false;
+function grupo_valido($con, $id_grupo){
+    stmt = mysqli_prepare ($con, "SELECT 1 FROM grupo WHERE id_grupo = ?"); //significa que solo confirma que existe ese dato en la BD, no envía datos como tal
+    mysqli_stmt_bind_param($stmt, "i", $id_grupo);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $id_grupo);
 
-    return true;
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
 }
 //validar que el tipo de usuario sea válido
 function usuario_valido($con, $tipo_usuario){
-    $obtener_tipos_usuario= "SELECT rol FROM tipo_usuario";
-    $sql_tipos_usuario = mysqli_query($con, $obtener_tipos_usuario);
-    $tipos_usuario = [];
-    while($resultado = mysqli_fetch_assoc($sql_tipos_usuario))
-    {
-        $tipos_usuario[]=$resultado['rol'];
-    }
-    if (!in_array($tipo_usuario, $tipos_usuario) )
-        return false;
+    stmt = mysqli_prepare ($con, "SELECT 1 FROM tipo_usuario WHERE rol = ?");
+    mysqli_stmt_bind_param($stmt, "i", $rol);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $rol);
 
-    return true;
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 }
 
 //validar que el truno sea válido
-function turno_valido($con, $turno){
-    $obtener_turnos= "SELECT turno FROM turno";
-    $sql_turnos = mysqli_query($con, $obtener_turnos);
-    $turnos = [];
-    while($resultado = mysqli_fetch_assoc($sql_turnos))
-    {
-        $turnos[]=$resultado['turno'];
-    }
-    if (!in_array($turno, $turnos) )
-        return false;
+function turno_valido($con, $id_turno){
+    stmt = mysqli_prepare ($con, "SELECT 1 FROM turno WHERE id_turno = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id_turno);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $id_turno);
 
-    return true;
+    return (bool) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 }
 
 
@@ -67,6 +52,7 @@ function sanitizar_entrada($conexion, $datos) {
 
     // Quitamos espacios en blanco vacíos al inicio y al final
     $datos = trim($datos);
+    $datos = stripslashes($datos);
 
     // Si meten "--", lo cambiamos por "".
     $datos = str_replace('--', '', $datos);
@@ -83,7 +69,7 @@ function sanitizar_entrada($conexion, $datos) {
 
     // Busca comillas simples (') o dobles (") y les pone una diagonal inversa (\) antes.
     // Así la base de datos sabe que es parte del nombre y NO un comando SQL.
-    $datosLimpio = mysqli_real_escape_string($conexion, $datos);
+    $datosLimpio = mysqli_real_escape_string($con, $datos);
     
     return $datosLimpio;
 }
@@ -98,24 +84,39 @@ function validar_correo($email){
     }       
 }
 
-function validar_numero($numero){
+function validar_correo_rol ($correo, $rol){
+    if (!validar_correo($correo)){
+        return false;
+    }
 
-    if(filter_var($numero, FILTER_SANITIZE_NUMBER_INT))
-        echo "La edad '$numero' es válida.\n"; 
+    if ($rol == 'Alumno'){
+        return (bool) preg_match('/^[0-9]+@alumno\.enp\.unam\.mx$/', $correo);
+    }
 
+    return (bool) preg_match('/^[a-zA-Z]+(\.[a-zA-Z]+)+@enp\.unam\.mx$/', $correo);
+}
+
+function validar_rango ($valor, $min, $max){
+    $valor = (int) $valor;
+    return $valor >= $min && $valor <= $max;
+}
+//se usan patrones regex para ir separando en base a los marcadores
+function validar_fecha($fecha){ 
+    if (empty($fecha)) return false;
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $fecha)) return false;
+    //estos son los marcadores
+    [$fecha_parte, $hora_parte] = explode('T', $fecha);
+    [$anio, $mes, $dia]          = explode('-', $fecha_parte);
+    [$hora, $minuto]             = explode(':', $hora_parte);
+    return checkdate((int)$mes, (int)$dia, (int)$anio)
+    //aqui checa que los numeros tengan sentido, por ejemplo no se puede escribir 78 en horas
+        && (int)$hora >= 0 && (int)$hora <= 23
+        && (int)$minuto >= 0 && (int)$minuto <= 59;
 }
 
 function hashear_password($pass){
-
-    //Generamos el hash
     $password_hasheada = password_hash($pass, PASSWORD_DEFAULT);
 
     return $password_hasheada;
 }
-
-/*
-function validar_password($pass_login, $hash_base_de_datos){
-    password_verify($passLogin, $hash_base_de_datos)
-}
-*/
 ?>
