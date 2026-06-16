@@ -1,5 +1,5 @@
 .grupo{
-    background-color: rgb(217, 217, 217);
+    background-color: #bee3db;
     position: relative;
     top: 5vw;
     left: 18%;
@@ -8,7 +8,7 @@
 }
 
 .boton{
-    background-color: rgb(250,131,57);
+    background-color:#f4ac45;
     color: white;
     font-size: 1vw;
     display: flex;
@@ -21,7 +21,7 @@
     border-radius: 10px;
 }
 h3{
-    background-color: rgba(75, 64, 177, 0.801);
+    background-color: #177e89;
     color: white;
     font-size: 3vw;
     position: relative;
@@ -32,8 +32,7 @@ h3{
 
 nav{
     height: 8vw;
-    background-color: rgb(217, 217, 217);
-    padding-top: 2vw;
+    background-color:#565676;
     margin: 0px;
 }
 img{
@@ -54,7 +53,7 @@ img#ete{
 #user{
     height: 2.5vw;
     width: 25%;
-    background-color: rgb(143,175,244);
+    background-color: #bee3db;
     border-radius: 5px;
     padding-left: 2vw;
     font-size: 1vw;
