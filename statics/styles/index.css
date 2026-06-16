@@ -10,7 +10,7 @@ body
 }
 header
 {
-    background-color: #D9D9D9;
+    background-color: #bee3db;
     height: 100px;
     display: flex;
     width: 100%;
@@ -30,7 +30,7 @@ img{
 }
 #contenedor_inicio
 {
-    background-color: #3D40EA;
+    background-color: #177e89;
     width:30%;
     align-self: center;
     margin-top: 40px;
@@ -61,7 +61,7 @@ img{
 }
 input
 {
-    background-color: #EB5528;
+    background-color: #f4ac45;
     border-radius: 20px;
     border: hidden;
     width: 100%;
@@ -74,7 +74,7 @@ input::placeholder
 }
 input[type=submit]
 {
-    background-color: #506ED2;
+    background-color: #bee3db;
     border-radius: 20px;
     width: 70%; 
     height: 50px;
@@ -83,7 +83,7 @@ input[type=submit]
 }
 input[type=submit]:hover
 {
-    background-color: #4a65bc;
+    background-color: #bee3db;
 }
 footer 
 {

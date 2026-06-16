@@ -33,7 +33,7 @@ nav img {
 }
 
 nav {
-    background-color: white;
+    background-color: #565676;
 
     justify-content: space-between;
     /* Manda elementos a extremos opuestos */
@@ -52,7 +52,7 @@ nav {
 }
 
 .fila_alumno {
-    background-color: #e0e0e0;
+    background-color: #bee3db;
 
     padding: 12px 15px;
 
@@ -68,8 +68,8 @@ nav {
 --------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 header {
-    background-color: #4a90d9;
-    color: white;
+    background-color: #bee3db;
+    color: black;
 
     padding: 8px 20px;
 
@@ -123,7 +123,7 @@ header h1 {
 --------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 .boton_agregar {
-    background-color: #f5a623;
+    background-color: #f4ac45;
     color: white;
 
     padding: 12px 25px;
