@@ -117,6 +117,7 @@ $result10 = mysqli_query($con, $query10);
     <img src="../../statics/img/logos/enp.svg" alt="ENP">
     <img src="../../statics/img/logos/ete.png" alt="ETE">
     <a href="../../dashboard/index.php">Inicio</a>
+    <a href="../../grupos/index.php">Grupos</a>
     <a href="../kpi.php">Reportes globales</a>
     <a href="kpi.php">Alumnos</a>
     <a href="../profesor/kpi.php">Actividades</a>
