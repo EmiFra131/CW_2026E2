@@ -1,80 +1,59 @@
 <?php
+session_start();
 
-    include 'include/db.php';
-    include 'include/validacion.php';
+include 'include/db.php';
+include 'include/validacion.php';
 
-    /*
-    if (!isset($_SESSION["usuario"]) || $_SESSION["rol"] != "Admin") {
-        header("Location: index.php");
-        exit();
+if (!isset($_SESSION["id_cuenta"]) || $_SESSION["rol"] !== "Administrador") {
+    header("Location: index.php");
+    exit();
+}
+
+$con = connect();
+
+$editar = false;
+$id_grupo_selec = 0;
+$grupos = [];
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $editar = true;
+
+    if (isset($_POST['grupo_act'])) {
+        $id_grupo_selec = (int) $_POST['grupo_act'];
     }
-    */
 
-    $con = connect();
+    if (isset($_POST["id_grupo"])) {
+        $id_grupo = (int) $_POST['id_grupo'];
+        $nombre = sanitizar_entrada($_POST['nombre']);
+        $id_turno = (int) $_POST['id_turno'];
 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $edit = true;
-        if(isset($_POST['grupo_act']))
-            $grupo_selec = $_POST['grupo_act'];
-        else
-            $grupo_selec = "";
+        if (turno_valido($con, $id_turno)) {
+            $stmnt_actualizar = mysqli_prepare(
+                $con,
+                "UPDATE grupo SET nombre_grupo = ?, id_turno = ? WHERE id_grupo = ?"
+            );
+            mysqli_stmt_bind_param($stmnt_actualizar, 'sii', $nombre, $id_turno, $id_grupo);
 
-        if(isset($_POST["grupo_ant"])){
-            $nombre = $_POST['nombre'];
-            $turno = $_POST['turno'];
-            $nombre_s = sanitizar_entrada($con,$nombre);
-            $t_valido = turno_valido($turno);
-
-            if($t_valido){
-                $anterior = $_POST['grupo_ant'];
-
-                if($turno == "matutino")
-                    $idt = 1;
-                else
-                    $idt = 2;
-
-                $stmt_editar_grupo = mysqli_prepare($con, "UPDATE grupo SET id_grupo = '$nombre_s', id_turno = $idt  
-                WHERE nombre_grupo = ?");
-                mysqli_stmt_bind_param($stmt, 's', $anterior);
-                mysql_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                $fila = mysqli_fetch_assoc($result)
-                $query = mysqli_query($con, $anterior);
-
-                if($query){
-                    $edit = false;
-                }
+            if (mysqli_stmt_execute($stmnt_actualizar)) {
+                $editar = false;
             }
         }
     }
-    else{
-        $edit = false;
+}
+
+$result_grupos = mysqli_query(
+    $con,
+    "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
+     FROM grupo g
+     INNER JOIN turno t ON g.id_turno = t.id_turno
+     INNER JOIN ciclo_escolar ce ON g.id_ciclo = ce.id_ciclo"
+);
+
+if ($result_grupos) {
+    while ($fila = mysqli_fetch_assoc($result_grupos)) {
+        $grupos[] = $fila;
     }
-
-    $gruposquery = "SELECT g.id_grupo, g.nombre_grupo, t.turno, ce.periodo
-    FROM grupo g
-    INNER JOIN turno t ON g.id_turno = t.id_turno
-    INNER JOIN ciclo_escolar ce ON g.id_ciclo = ce.id_ciclo";
-
-    $query = mysqli_query($con, $gruposquery);
-
-    if($query){
-
-        $id = [];
-        $grupos = [];
-        $turno = [];
-        $periodo = [];
-        while($fila = mysqli_fetch_assoc($query)){
-            $id[] = $fila['id_grupo'];
-            $grupos[] = $fila['nombre_grupo'];
-            $turno[] = $fila['turno'];
-            $periodo[] = $fila['periodo'];
-        }
-        
-    }
-    else{
-        echo "NADA";
-    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -82,64 +61,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin_grupos</title>
+    <title>Panel de Control de Grupos</title>
     <link rel="stylesheet" href="statics/styles/admin_grupos.css">
 </head>
 <body>
+
     <nav>
-        <img src="../statics/img/logos/unam.png" alt="Universidad Nacional Autonoma De Mexico" id="unam">
-        <img src="../statics/img/logos/enp.svg" alt="Escuela Nacional Preparatoria 6">
-        <img src="../statics/img/logos/ete.png" alt="Estudios Tecnicos Especializados" id="ete">
+        <img src="statics/img/logos/unam.png" alt="Universidad Nacional Autónoma de México" id="unam">
+        <img src="statics/img/logos/enp.svg" alt="Escuela Nacional Preparatoria 6">
+        <img src="statics/img/logos/ete.png" alt="Estudios Técnicos Especializados" id="ete">
     </nav>
-    <div id="user">
-        <p><strong>Administrador</strong></p>
-    </div>
-    <div id="contenedor">
 
-        <?php
-            foreach($grupos as $grupo){
+    <header>
+        <p>Administrador</p>
+    </header>
 
-                if(!$edit){
-                    echo '<div class="grupo">
-                        <h3> Grupo' . htmlspecialchars($grupo) . '</h3>
-                        <form action="admin_visual.php" method="post">
-                            <input type="hidden" name="grupo_act" value=' . htmlspecialchars($grupo) . '>
-                            <button type="submit" class="boton"> Ver integrantes </button>
-                        </form>
-                        <br>
+    <main>
+        <?php foreach ($grupos as $grupo): ?>
+
+            <?php if (!$editar): ?>
+                <article class="grupo">
+                    <h2><?= htmlspecialchars($grupo['nombre_grupo']) ?></h2>
+
+                    <form action="admin_visual.php" method="post">
+                        <input type="hidden" name="grupo_act" value="<?= htmlspecialchars($grupo['id_grupo']) ?>">
+                        <button type="submit" class="boton">Ver integrantes</button>
+                    </form>
+
+                    <form action="admin_grupos.php" method="post">
+                        <input type="hidden" name="grupo_act" value="<?= htmlspecialchars($grupo['id_grupo']) ?>">
+                        <button type="submit" class="boton">Editar</button>
+                    </form>
+                </article>
+
+            <?php else: ?>
+                <?php if ($grupo['id_grupo'] == $id_grupo_selec): ?>
+                    <article class="grupo">
                         <form action="admin_grupos.php" method="post">
-                            <input type="hidden" name="grupo_act" value=' . htmlspecialchars($grupo) . '> 
-                            <button type="submit" class="boton"> Editar </button>
+                            <div>
+                                <label for="nombre">Cambiar el nombre del grupo:</label>
+                                <input
+                                    id="nombre"
+                                    name="nombre"
+                                    type="text"
+                                    placeholder="<?= htmlspecialchars($grupo['nombre_grupo']) ?>"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="turno">Turno</label>
+                                <select id="turno" name="turno" required>
+                                    <option value="" disabled selected>Escoge el nuevo turno para el grupo</option>
+                                    <?php while ($turno = mysqli_fetch_assoc($result_turnos)): ?>
+                                        <option value="<?= htmlspecialchars($turno['id_turno']) ?>">
+                                            <?= htmlspecialchars($turno['turno']) ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                           <input type="hidden" name="id_grupo" value="<?= htmlspecialchars($grupo['id_grupo']) ?>">
+                            <button type="submit" class="boton">Guardar</button>
                         </form>
-                    </div>';
-                }
-                else{
-                    if($grupo == $grupo_selec){
-                        echo '<div class="grupo">
-                            <form action="admin_grupos.php" method="post">
-                                <div>
-                                    <label for="nombre">Cambiar el nombre del grupo:</label>
-                                    <input id="nombre" name="nombre" type="text" placeholder="' . htmlspecialchars($grupo) . '">s
-                                </div>
-                                <div>
-                                    <label for="turno">turno</label>
-                                    <select name="turno" id="turno" required>
-                                        <option value="" disabled selected>Escoge el nuevo turno para el grupo:</option>
-                                        <option value="Matutino">Matutino</option>
-                                        <option value="Vespertino">Vespertino</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <input id="grupo_ant" name="grupo_ant" type="hidden" value="' . htmlspecialchars($grupo) . '">
-                                </div>
-                                <button type="submit" class="boton">Guardar</button>
-                            </form>
-                        </div>';
-                    }
-                }
-            }
-            
-        ?>
-    </div>
+                    </article>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+                            
+                        
+              
+    </main>
+
 </body>
 </html>
